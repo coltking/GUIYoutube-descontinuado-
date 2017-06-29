@@ -7,3 +7,9 @@ el archivo sobre el que se va a trabajar es llamaryoutube.pyw ya que es el archi
 tiene el codigo principal... el archivo youtube.py tiene toda la parte grafica escrita
 en python, y youtube.ui es el archivo de diseño creado en QT Designer (que luego fue
 parseado a youtube.py)
+
+
+# Dependencias:
+
+PyQT4
+requiere tambien de tener instalado youtube-dl y el reproductor mpv
