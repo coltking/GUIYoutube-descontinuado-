@@ -3,7 +3,7 @@ import os
 import subprocess
 import time
 from youtube import *
-
+from conexion import *
 
 class MiFormulario(QtGui.QDialog):
     def __init__(self,parent=None):
@@ -270,64 +270,15 @@ class MiFormulario(QtGui.QDialog):
             texto = self.ui.lineBuscar.text()
         else:
             texto = "we are number one"
-        ids = "youtube-dl \"ytsearch5:"+texto+"\" --get-id > id.txt"
-        nombre = "youtube-dl \"ytsearch5:"+texto+"\" --get-title > nombre.txt"
-        os.system(str(ids))
-        os.system(str(nombre))
+        conn = Conexion(5,texto)
+        hola = conn.obtenerDatos()
+        self.ui.label1.setText(conn.titles[0])
+        self.ui.label2.setText(conn.titles[1])
+        self.ui.label3.setText(conn.titles[2])
+        self.ui.label4.setText(conn.titles[3])
+        self.ui.label5.setText(conn.titles[4])
 
-        file = open('nombre.txt', 'r')
-        nombre1 = file.readline()
-        nombre2 = file.readline()
-        nombre3 = file.readline()
-        nombre4 = file.readline()
-        nombre5 = file.readline()
-        file.close()
-        self.ui.label1.setText(nombre1)
-        self.ui.label2.setText(nombre2)
-        self.ui.label3.setText(nombre3)
-        self.ui.label4.setText(nombre4)
-        self.ui.label5.setText(nombre5)
-        file = open('id.txt', 'r')
-        cadena = file.readline()
-        temp = len(cadena)
-        id1 = cadena[:temp -1]
-        os.system("wget https://img.youtube.com/vi/"+id1+"/maxresdefault.jpg -O 1.jpg")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("1.jpg"))
-        self.ui.Button1.setIcon(icon1)
-
-        cadena2 = file.readline()
-        temp = len(cadena2)
-        id2 = cadena2[:temp -1]
-        os.system("wget https://img.youtube.com/vi/" + id2 + "/maxresdefault.jpg -O 2.jpg")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("2.jpg"))
-        self.ui.Button2.setIcon(icon2)
-
-        cadena3 = file.readline()
-        temp = len(cadena3)
-        id3 = cadena3[:temp -1]
-        os.system("wget https://img.youtube.com/vi/" + id3 + "/maxresdefault.jpg -O 3.jpg")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("3.jpg"))
-        self.ui.Button3.setIcon(icon3)
-
-        cadena4 = file.readline()
-        temp = len(cadena4)
-        id4 = cadena4[:temp - 1]
-        os.system("wget https://img.youtube.com/vi/" + id4 + "/maxresdefault.jpg -O 4.jpg")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("4.jpg"))
-        self.ui.Button4.setIcon(icon4)
-
-        cadena5 = file.readline()
-        temp = len(cadena5)
-        id5 = cadena5[:temp - 1]
-        os.system("wget https://img.youtube.com/vi/" + id5 + "/maxresdefault.jpg -O 5.jpg")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("5.jpg"))
-        self.ui.Button5.setIcon(icon5)
-        file.close()
+        
 
 
 
