@@ -1,37 +1,63 @@
+# -*- encoding=utf-8 -*-
 import subprocess
-#import re
+import youtube
 
-class Conexion():
-    def __init__(self,RESULTADOS, STRING):
-        self.numberOfParameters = 3
-        self.string = STRING
-        self.resultados = RESULTADOS
-        self.titles = []
+
+class BYT():
+
+    def __init__(self, términoDeBúsqueda, númeroDeResultados):
+
+        self.númeroDeParámetros = 3
+        self.término = términoDeBúsqueda
+        self.resultados = númeroDeResultados
+
+        self.títulos = []
         self.IDs = []
-        self.duration = []
+        self.duraciones = []
 
     def obtenerDatos(self):
-        
 
-        with subprocess.Popen('youtube-dl \"ytsearch'+str(self.resultados)+':'+self.string+'\" --get-id --get-title --get-duration', stdout=subprocess.PIPE, shell=True) as process:
-            members = []
-            clean = []
-            while process.poll() is None:
-                results = process.stdout.readline()
-                members.append(str(results))
+        comandoDeBúsqueda = 'youtube-dl \"ytsearch'+str(self.resultados)+':'+self.término+'\" --get-id --get-title --get-duration'
+        with subprocess.Popen(comandoDeBúsqueda, stdout=subprocess.PIPE, shell=True) as proceso:
 
-            for i in range(0, len(members)):
-                if len(members[i]) > 5:
-                    clean.append(members[i][2:-3])
+            miembros = []
+            limpio = []
 
-        for i in range(0, len(clean), self.numberOfParameters):
-            self.titles.append(clean[i])
-        for i in range(1, len(clean), self.numberOfParameters):
-            self.IDs.append(clean[i])
-        for i in range(2, len(clean), self.numberOfParameters):
-            self.duration.append(clean[i])
+            while proceso.poll() is None:
+                línea = proceso.stdout.readline()
+                miembros.append(str(línea))
 
-        #print(titles, "\n", IDs, "\n", duration)
+            for i in range(0, len(miembros)):
+                if len(miembros[i]) > 5:
+                    limpio.append(miembros[i][2:-3])
 
-        for i in range(0, len(self.titles)):
-            print("Video", str(i), ":", self.titles[i], ". Duration:", self.duration[i], "Mns. ID:", '"', self.IDs[i], '".')
+        for i in range(0, len(limpio), self.númeroDeParámetros):
+            self.títulos.append(limpio[i])
+        for i in range(1, len(limpio), self.númeroDeParámetros):
+            self.IDs.append(limpio[i])
+        for i in range(2, len(limpio), self.númeroDeParámetros):
+            self.duraciones.append(limpio[i])
+
+        # Esto de aquí ya está demás. Lo dejo por si sirve de guía en el futuro.
+        #for i in range(0, len(self.títulos)):
+            #print("Video", str(i), ":", self.títulos[i], ". Duration:",
+            #self.duraciones[i], "Mns. ID:", '"',
+            #self.IDs[i], '".')
+
+
+            #Lo que sigue a continuación sirve únicamente para testeo de este script.
+        #Para la versión final ha de eliminarse/comentarse para que no interfiera.
+
+        self.lista = []
+        self.lista.append(self.títulos)
+        self.lista.append(self.IDs)
+        self.lista.append(self.duraciones)
+        # Este return debería devolver el diccionario.
+        return self.lista
+
+# Nuevo objeto BYT() - Toma dos parámetros, términoDeBúsqueda y númeroDeResultados.
+nuevaBúsqueda = BYT("Godot Engine", 2)
+# Llamada al método obtenerDatos del objeto BYT()
+resultado = nuevaBúsqueda.obtenerDatos()
+# Print
+print(resultado)
