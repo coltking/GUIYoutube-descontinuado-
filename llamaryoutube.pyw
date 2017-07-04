@@ -270,13 +270,11 @@ class MiFormulario(QtGui.QDialog):
             texto = self.ui.lineBuscar.text()
         else:
             texto = "we are number one"
-        conn = Conexion(5,texto)
+        conn = BYT(texto,5)
         hola = conn.obtenerDatos()
-        self.ui.label1.setText(conn.titles[0])
-        self.ui.label2.setText(conn.titles[1])
-        self.ui.label3.setText(conn.titles[2])
-        self.ui.label4.setText(conn.titles[3])
-        self.ui.label5.setText(conn.titles[4])
+        for i in range(5):
+            print(hola["Título"+str(i)])
+
 
         
 
