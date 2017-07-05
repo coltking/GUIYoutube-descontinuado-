@@ -1,11 +1,9 @@
 #-*- encoding = utf-8 -*-
 import urllib.request
-#from PIL import Image
 import sys
 import youtube
 import subprocess
 from PyQt4 import QtGui, QtCore
-#import re
 from videoWidget import *
 
 #numberOfParameters = 4
