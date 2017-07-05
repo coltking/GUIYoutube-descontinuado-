@@ -26,11 +26,11 @@ class BYT():
 
             while proceso.poll() is None:
                 línea = proceso.stdout.readline()
-                miembros.append(str(línea))
+                miembros.append(línea.decode())
 
             for i in range(0, len(miembros)):
-                if len(miembros[i]) > 5:
-                    limpio.append(miembros[i][2:-3])
+                if len(miembros[i]) > 3:
+                    limpio.append(miembros[i][0:-1])
 
         for i in range(0, len(limpio), self.númeroDeParámetros):
             self.títulos.append(limpio[i])
@@ -38,14 +38,14 @@ class BYT():
             self.IDs.append(limpio[i])
         for i in range(2, len(limpio), self.númeroDeParámetros):
             self.duraciones.append(limpio[i])
-        self.descargarthumb()
+        self.descargarThumb()
 
         #este for llena el diccionario
         self.lista = {}
-        for i in range(len(self.IDs)):
+        for i in range(0, len(self.IDs)):
             tmp1 = "Título"+str(i)
             tmp2 = "ID"+str(i)
-            tmp3 = "Duracion"+str(i)
+            tmp3 = "Duración"+str(i)
             self.lista[tmp1] = self.títulos[i]
             self.lista[tmp2] = self.IDs[i]
             self.lista[tmp3] = self.duraciones[i]
@@ -53,9 +53,11 @@ class BYT():
         return self.lista
 
 
-    def descargarthumb(self):
+    def descargarThumb(self):
         for i in range(self.resultados):
-            urllib.request.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg", "thumbs/" + str(i) + ".jpg")
+            url = "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg"
+            urllib.request.urlretrieve(url, "thumbs/" + str(i) + ".jpg")
+            print(url)
 
         # Esto de aquí ya está demás. Lo dejo por si sirve de guía en el futuro.
         #for i in range(0, len(self.títulos)):

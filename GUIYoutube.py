@@ -40,6 +40,7 @@ class Ventana(QtGui.QMainWindow):
         # LineEdit para el término de búsqueda.Ventana
 
         self.términoDeBúsqueda = QtGui.QLineEdit("Término de búsqueda", self)
+        self.términoDeBúsqueda.returnPressed.connect(self.consulta)
         self.layoutPrincipal.addWidget(self.términoDeBúsqueda, 0, 4, 1, 2)
 
         # Botón Buscar para búsqueda.
@@ -81,6 +82,7 @@ class Ventana(QtGui.QMainWindow):
         término = self.términoDeBúsqueda.text()
         objetoBúsqueda = BYT(término, self.cantidad)
         self.resultados = objetoBúsqueda.obtenerDatos()
+
         self.poblarLista(self.resultados, self.cantidad)
 
     def poblarLista(self, resultados, cantidad):
@@ -90,7 +92,8 @@ class Ventana(QtGui.QMainWindow):
         tempWidget.setLayout(tempLayout)
 
         for i in range(0, cantidad):
-            videoBlock = VideoWidget(resultados["Título" + str(i)], i)
+            videoBlock = VideoWidget(resultados["Título" + str(i)], i,
+                                    resultados["Duración" + str(i)])
             tempLayout.addWidget(videoBlock)
         self.scroll.setWidget(tempWidget)
 
