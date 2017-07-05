@@ -71,11 +71,17 @@ class Ventana(QtGui.QMainWindow):
     # publicar la aplicación o antes del merge con master!
 
     def consulta(self):
+        if self.opción1.isChecked() == True:
+            self.cantidad = 1
+        if self.opción2.isChecked() == True:
+            self.cantidad = 5
+        if self.opción3.isChecked() == True:
+            self.cantidad = 10
+
         término = self.términoDeBúsqueda.text()
-        cantidad = self.cantidad
-        objetoBúsqueda = BYT(término, cantidad)
+        objetoBúsqueda = BYT(término, self.cantidad)
         self.resultados = objetoBúsqueda.obtenerDatos()
-        self.poblarLista(self.resultados, cantidad)
+        self.poblarLista(self.resultados, self.cantidad)
 
     def poblarLista(self, resultados, cantidad):
 
