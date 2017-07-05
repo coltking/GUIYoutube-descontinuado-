@@ -46,9 +46,15 @@ class BYT():
             tmp1 = "Título"+str(i)
             tmp2 = "ID"+str(i)
             tmp3 = "Duracion"+str(i)
-            self.lista[tmp1] = [self.títulos[i]]
-            self.lista[tmp2] = [self.IDs[i]]
-            self.lista[tmp3] = [self.duraciones[i]]
+            tmpPlayMPV = "PlayMPV"+str(i)
+            tmpPlayVLC = "PlayVLC"+str(i)
+            tmpDownload = "Descarga"+str(i)
+            self.lista[tmp1] = self.títulos[i]
+            self.lista[tmp2] = self.IDs[i]
+            self.lista[tmp3] = self.duraciones[i]
+            self.lista[tmpPlayMPV] = ["mpv","https://www.youtube.com/watch?v="+self.IDs[i]]
+            self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v="+self.IDs[i]]
+            self.lista[tmpDownload] = ["youtube-dl", "-f mp4 https://www.youtube.com/watch?v="+self.IDs[i]]
         # Este return debería devolver el diccionario.
         return self.lista
 
@@ -72,7 +78,7 @@ class BYT():
 if __name__ == "__main__":
     conn = BYT("hola mundo",10)
     hola = conn.obtenerDatos()
-    print(conn.lista.get("Título0"))
+    subprocess.Popen(conn.lista["PlayVLC0"])
 
 
 
