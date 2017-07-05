@@ -17,6 +17,7 @@ class Ventana(QtGui.QMainWindow):
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setGeometry(100, 100, 800, 500)
         self.cantidad = 5
+        self.reproductorPreferido = "VLC"
 
         self.páginaPrincipal()
         #self.poblarLista()
@@ -66,10 +67,29 @@ class Ventana(QtGui.QMainWindow):
 
         self.listaDeOpciones.setLayout(self.listaLayout)
 
+        # ComboBox para elegir reproductor.
+
+        self.reproductorLista = QtGui.QComboBox(self)
+        self.reproductorLabel = QtGui.QLabel("Elegir reproductor:", self)
+
+        self.reproductorLista.addItem("VLC Media Player")
+        self.reproductorLista.addItem("MPV Media Player")
+
+        self.reproductorLista.activated[str].connect(self.playerSwitch)
+
+        self.layoutPrincipal.addWidget(self.reproductorLabel, 5, 4, 1, 1)
+        self.layoutPrincipal.addWidget(self.reproductorLista, 5, 5, 1, 1)
+
         self.show()
 
     # Función de prueba para poblar el scroll principal. Eliminar/comentar para
     # publicar la aplicación o antes del merge con master!
+
+    def playerSwitch(self, text):
+        if "VLC" in text:
+            self.reproductorPreferido = "VLC"
+        if "MPV" in text:
+            self.reproductorPreferido = "MPV"
 
     def consulta(self):
         if self.opción1.isChecked() == True:
@@ -96,7 +116,8 @@ class Ventana(QtGui.QMainWindow):
                                     resultados["Duración" + str(i)],
                                     resultados["PlayVLC" + str(i)],
                                     resultados["PlayMPV" + str(i)],
-                                    resultados["Descarga" + str(i)])
+                                    resultados["Descarga" + str(i)],
+                                    self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
         self.scroll.setWidget(tempWidget)
 

@@ -5,7 +5,7 @@ import subprocess
 
 class VideoWidget(QtGui.QWidget):
 
-    def __init__(self, title, orden, duración, vlc, mpv, descarga):
+    def __init__(self, title, orden, duración, vlc, mpv, descarga, preferido):
         QtGui.QWidget.__init__(self)
         self.orden = orden
         self.title = title
@@ -13,6 +13,8 @@ class VideoWidget(QtGui.QWidget):
         self.vlc = vlc
         self.mpv = mpv
         self.descarga = descarga
+        self.preferido = preferido
+        #
         self.setObjectName(("widget"))
         #self.resize(593, 176)
         self.sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
@@ -62,7 +64,10 @@ class VideoWidget(QtGui.QWidget):
 
     # Funciones de clase.
     def play(self):
-        subprocess.Popen(self.vlc)
+        if "VLC" in self.preferido:
+            subprocess.Popen(self.vlc)
+        if "MPV" in self.preferido:
+            subprocess.Popen(self.mpv)
 
     def descargar(self):
         subprocess.Popen(self.descarga)
