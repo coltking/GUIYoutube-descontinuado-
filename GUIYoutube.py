@@ -6,6 +6,7 @@ from urllib.request import urlretrieve
 # Importando clases propias
 
 from videoWidget import *
+from BYT import *
 
 
 class Ventana(QtGui.QMainWindow):
@@ -15,9 +16,10 @@ class Ventana(QtGui.QMainWindow):
         self.ver = "0.1 Alpha"
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setGeometry(100, 100, 800, 500)
+        self.cantidad = 5
 
         self.páginaPrincipal()
-        self.poblarLista()
+        #self.poblarLista()
 
     def páginaPrincipal(self):
 
@@ -44,6 +46,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.buscarBtn = QtGui.QPushButton("Buscar en YT", self)
         self.layoutPrincipal.addWidget(self.buscarBtn, 1, 5, 1, -1)
+        self.buscarBtn.pressed.connect(self.consulta)
 
         # Lista de opciones para número de búsquedas.
 
@@ -67,14 +70,24 @@ class Ventana(QtGui.QMainWindow):
     # Función de prueba para poblar el scroll principal. Eliminar/comentar para
     # publicar la aplicación o antes del merge con master!
 
-    def poblarLista(self):
+    def consulta(self):
+        término = self.términoDeBúsqueda.text()
+        cantidad = self.cantidad
+        objetoBúsqueda = BYT(término, cantidad)
+        self.resultados = objetoBúsqueda.obtenerDatos()
+        self.poblarLista(self.resultados, cantidad)
+
+    def poblarLista(self, resultados, cantidad):
+
         tempWidget = QtGui.QWidget(self)
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
-        for i in range(0, 5):
-            videoBlock = VideoWidget("Título de prueba.")
+
+        for i in range(0, cantidad):
+            videoBlock = VideoWidget(resultados["Título" + str(i)], i)
             tempLayout.addWidget(videoBlock)
         self.scroll.setWidget(tempWidget)
+
 
 app = QtGui.QApplication(sys.argv)
 win = Ventana()
