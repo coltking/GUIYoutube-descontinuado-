@@ -26,11 +26,11 @@ class BYT():
 
             while proceso.poll() is None:
                 línea = proceso.stdout.readline()
-                miembros.append(línea.decode())
+                miembros.append(str(línea))
 
             for i in range(0, len(miembros)):
-                if len(miembros[i]) > 3:
-                    limpio.append(miembros[i][0:-1])
+                if len(miembros[i]) > 5:
+                    limpio.append(miembros[i][2:-3])
 
         for i in range(0, len(limpio), self.númeroDeParámetros):
             self.títulos.append(limpio[i])
@@ -38,26 +38,30 @@ class BYT():
             self.IDs.append(limpio[i])
         for i in range(2, len(limpio), self.númeroDeParámetros):
             self.duraciones.append(limpio[i])
-        self.descargarThumb()
+        self.descargarthumb()
 
         #este for llena el diccionario
         self.lista = {}
-        for i in range(0, len(self.IDs)):
+        for i in range(len(self.IDs)):
             tmp1 = "Título"+str(i)
             tmp2 = "ID"+str(i)
-            tmp3 = "Duración"+str(i)
+            tmp3 = "Duracion"+str(i)
+            tmpPlayMPV = "PlayMPV"+str(i)
+            tmpPlayVLC = "PlayVLC"+str(i)
+            tmpDownload = "Descarga"+str(i)
             self.lista[tmp1] = self.títulos[i]
             self.lista[tmp2] = self.IDs[i]
             self.lista[tmp3] = self.duraciones[i]
+            self.lista[tmpPlayMPV] = ["mpv","https://www.youtube.com/watch?v="+self.IDs[i]]
+            self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v="+self.IDs[i]]
+            self.lista[tmpDownload] = ["youtube-dl", "-f mp4 https://www.youtube.com/watch?v="+self.IDs[i]]
         # Este return debería devolver el diccionario.
         return self.lista
 
 
-    def descargarThumb(self):
+    def descargarthumb(self):
         for i in range(self.resultados):
-            url = "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg"
-            urllib.request.urlretrieve(url, "thumbs/" + str(i) + ".jpg")
-            print(url)
+            urllib.request.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/hqdefault.jpg", str(i) + ".jpg")
 
         # Esto de aquí ya está demás. Lo dejo por si sirve de guía en el futuro.
         #for i in range(0, len(self.títulos)):
@@ -72,9 +76,9 @@ class BYT():
 
 
 if __name__ == "__main__":
-    conn = BYT("hola mundo",5)
+    conn = BYT("hola mundo",10)
     hola = conn.obtenerDatos()
-    print(conn.lista.get("Título0"))
+    subprocess.Popen(conn.lista["PlayVLC0"])
 
 
 
