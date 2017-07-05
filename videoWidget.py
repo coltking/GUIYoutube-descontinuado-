@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
-
-
 from PyQt4 import QtCore, QtGui
+import subprocess
+
 
 class VideoWidget(QtGui.QWidget):
 
-    def __init__(self, title, orden, duración):
+    def __init__(self, title, orden, duración, vlc, mpv, descarga):
         QtGui.QWidget.__init__(self)
         self.orden = orden
         self.title = title
         self.duración = duración
+        self.vlc = vlc
+        self.mpv = mpv
+        self.descarga = descarga
         self.setObjectName(("widget"))
         #self.resize(593, 176)
         self.sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
@@ -25,6 +28,7 @@ class VideoWidget(QtGui.QWidget):
         #Botón Play
         self.playBtn = QtGui.QPushButton("Play", self)
         self.playBtn.setObjectName(("playBtn"))
+        self.playBtn.pressed.connect(self.play)
         self.gridLayout.addWidget(self.playBtn, 2, 2, 1, 1)
 
         #Label con título de video
@@ -39,11 +43,12 @@ class VideoWidget(QtGui.QWidget):
         #Botón Descarga
         self.downloadBtn = QtGui.QPushButton("Descargar", self)
         self.downloadBtn.setObjectName(("downloadBtn"))
+        self.downloadBtn.pressed.connect(self.descargar)
         self.gridLayout.addWidget(self.downloadBtn, 2, 5, 1, 1)
 
         #Label del thumbnail
         self.thumbLabel = QtGui.QLabel(self)
-        self.pic = QtGui.QPixmap("thumbs/" + str(self.orden) + ".jpg")
+        self.pic = QtGui.QPixmap(".thumbs/" + str(self.orden) + ".jpg")
         self.thumbLabel.setPixmap(self.pic)
         self.thumbLabel.setScaledContents(True)
         self.thumbLabel.setMaximumWidth(220)
@@ -54,3 +59,10 @@ class VideoWidget(QtGui.QWidget):
         self.durLabel = QtGui.QLabel("Time: " + str(self.duración), self)
         self.durLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
         self.gridLayout.addWidget(self.durLabel, 2, 3, 1, 2)
+
+    # Funciones de clase.
+    def play(self):
+        subprocess.Popen(self.vlc)
+
+    def descargar(self):
+        subprocess.Popen(self.descarga)

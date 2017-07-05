@@ -93,7 +93,10 @@ class Ventana(QtGui.QMainWindow):
 
         for i in range(0, cantidad):
             videoBlock = VideoWidget(resultados["Título" + str(i)], i,
-                                    resultados["Duración" + str(i)])
+                                    resultados["Duración" + str(i)],
+                                    resultados["PlayVLC" + str(i)],
+                                    resultados["PlayMPV" + str(i)],
+                                    resultados["Descarga" + str(i)])
             tempLayout.addWidget(videoBlock)
         self.scroll.setWidget(tempWidget)
 
