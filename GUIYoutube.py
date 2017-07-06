@@ -17,6 +17,7 @@ class Ventana(QtGui.QMainWindow):
         super(Ventana, self).__init__()
         self.ver = "0.1 Alpha"
         self.setWindowTitle("GUIYoutube - "+self.ver)
+        self.setWindowIcon(QtGui.QIcon("Youtube.ico"))
         self.setGeometry(100, 100, 800, 500)
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
