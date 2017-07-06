@@ -41,7 +41,10 @@ class Ventana(QtGui.QMainWindow):
         # LineEdit para el término de búsqueda.Ventana
 
         self.términoDeBúsqueda = QtGui.QLineEdit("Término de búsqueda", self)
-        self.términoDeBúsqueda.returnPressed.connect(self.consulta)
+
+        #usar Intro en el line edit por alguna razón no actualiza el label. Comentado por ahora.
+        #self.términoDeBúsqueda.returnPressed.connect(self.consulta)
+
         self.layoutPrincipal.addWidget(self.términoDeBúsqueda, 0, 4, 1, 2)
 
         # Botón Buscar para búsqueda.
@@ -80,6 +83,11 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.reproductorLabel, 5, 4, 1, 1)
         self.layoutPrincipal.addWidget(self.reproductorLista, 5, 5, 1, 1)
 
+        # Label para mostrar el progreso de las operaciones
+        self.aviso = QtGui.QLabel(self)
+        self.aviso.setAlignment(QtCore.Qt.AlignCenter)
+        self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
+
         self.show()
 
     # Función de prueba para poblar el scroll principal. Eliminar/comentar para
@@ -92,6 +100,10 @@ class Ventana(QtGui.QMainWindow):
             self.reproductorPreferido = "MPV"
 
     def consulta(self):
+
+        self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
+        QtGui.QApplication.processEvents()
+
         if self.opción1.isChecked() == True:
             self.cantidad = 1
         if self.opción2.isChecked() == True:
@@ -119,8 +131,8 @@ class Ventana(QtGui.QMainWindow):
                                     resultados["Descarga" + str(i)],
                                     self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
+            self.aviso.setText("")
         self.scroll.setWidget(tempWidget)
-
 
 app = QtGui.QApplication(sys.argv)
 win = Ventana()
