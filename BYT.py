@@ -1,7 +1,8 @@
 # -*- encoding=utf-8 -*-
 import subprocess
-import youtube
-import urllib.request
+import urllib.request as U
+import urllib.parse
+import bs4 as bs
 
 
 class BYT():
@@ -16,33 +17,31 @@ class BYT():
         self.IDs = []
         self.duraciones = []
 
+        # Pequeño loop para armar el término de búsqueda.
+        self.termSplit = self.término.split()
+        self.termFull = ""
+        for i in range(0, len(self.termSplit)):
+            self.termFull= self.termFull + self.termSplit[i] + "+"
+
     def obtenerDatos(self):
 
-        comandoDeBúsqueda = 'youtube-dl \"ytsearch'+str(self.resultados)+':'+self.término+'\" --get-id --get-title --get-duration'
-        with subprocess.Popen(comandoDeBúsqueda, stdout=subprocess.PIPE, shell=True) as proceso:
+        # Enconding link
+        self.term = urllib.parse.quote(self.termFull)
+        self.datos = U.urlopen("https://www.youtube.com/results?search_query=" + self.term)
+        self.soup = bs.BeautifulSoup(self.datos, "lxml")
 
-            miembros = []
-            limpio = []
+        for i in self.soup.body.find_all("a", class_= "yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 yt-uix-sessionlink spf-link "):
+            self.títulos.append(i.get("title"))
+            self.IDs.append(i.get("href")[9:20])
 
-            while proceso.poll() is None:
-                línea = proceso.stdout.readline()
-                miembros.append(str(línea.decode()))
+        for i in self.soup.body.find_all("span", class_= "video-time"):
+            self.duraciones.append(i.text)
 
-            for i in range(0, len(miembros)):
-                if len(miembros[i]) >= 1:
-                    limpio.append(miembros[i][:-1])
-
-        for i in range(0, len(limpio), self.númeroDeParámetros):
-            self.títulos.append(limpio[i])
-        for i in range(1, len(limpio), self.númeroDeParámetros):
-            self.IDs.append(limpio[i])
-        for i in range(2, len(limpio), self.númeroDeParámetros):
-            self.duraciones.append(limpio[i])
         self.descargarthumb()
 
         #este for llena el diccionario
         self.lista = {}
-        for i in range(len(self.IDs)):
+        for i in range(len(self.duraciones)):
             tmp1 = "Título"+str(i)
             tmp2 = "ID"+str(i)
             tmp3 = "Duración"+str(i)
@@ -63,9 +62,10 @@ class BYT():
 
 
     def descargarthumb(self):
-        for i in range(self.resultados):
-            urllib.request.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg", ".thumbs/" + str(i) + ".jpg")
+        for i in range(0, len(self.duraciones)):
+            U.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg", ".thumbs/" + str(i) + ".jpg")
 
+            #print("http://img.youtube.com/vi/"+self.IDs[i][9:]+"/mqdefault.jpg")
         # Esto de aquí ya está demás. Lo dejo por si sirve de guía en el futuro.
         #for i in range(0, len(self.títulos)):
             #print("Video", str(i), ":", self.títulos[i], ". Duration:",

@@ -65,26 +65,15 @@ class Ventana(QtGui.QMainWindow):
 
         self.opción1 = QtGui.QRadioButton("1 video (primer resultado, más rápido)", self)
         self.opción2 = QtGui.QRadioButton("5 videos (primeros 5 resultados)", self)
-        self.opción3 = QtGui.QRadioButton("10 videos (primeros 10 resultados. Lento)", self)
+        self.opción3 = QtGui.QRadioButton("10 videos (primeros 10 resultados)", self)
+        self.opción4 = QtGui.QRadioButton("18-20 videos (primera página de resultados, más lento)", self)
 
         self.listaLayout.addWidget(self.opción1)
         self.listaLayout.addWidget(self.opción2)
         self.listaLayout.addWidget(self.opción3)
+        self.listaLayout.addWidget(self.opción4)
 
         self.listaDeOpciones.setLayout(self.listaLayout)
-
-        # ComboBox para elegir reproductor.
-
-        #self.reproductorLista = QtGui.QComboBox(self)
-        #self.reproductorLabel = QtGui.QLabel("Elegir reproductor:", self)
-
-        #self.reproductorLista.addItem("VLC Media Player")
-        #self.reproductorLista.addItem("MPV Media Player")
-
-        #self.reproductorLista.activated[str].connect(self.playerSwitch)
-
-        #self.layoutPrincipal.addWidget(self.reproductorLabel, 5, 4, 1, 1)
-        #self.layoutPrincipal.addWidget(self.reproductorLista, 5, 5, 1, 1)
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
@@ -104,15 +93,6 @@ class Ventana(QtGui.QMainWindow):
 
         self.show()
 
-    # Función de prueba para poblar el scroll principal. Eliminar/comentar para
-    # publicar la aplicación o antes del merge con master!
-
-    #def playerSwitch(self, text):
-        #if "VLC" in self.popup.clickedButton().text():
-            #self.reproductorPreferido = "VLC"
-        #if "MPV" in self.popup.clickedButton().text():
-            #self.reproductorPreferido = "MPV"
-
     def consulta(self):
 
         self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
@@ -124,6 +104,8 @@ class Ventana(QtGui.QMainWindow):
             self.cantidad = 5
         if self.opción3.isChecked() == True:
             self.cantidad = 10
+        if self.opción4.isChecked() == True:
+            self.cantidad = 20
 
         término = self.términoDeBúsqueda.text()
         objetoBúsqueda = BYT(término, self.cantidad)
