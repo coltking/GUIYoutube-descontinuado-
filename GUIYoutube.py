@@ -1,4 +1,6 @@
+#! /usr/bin/env python3
 # -*- encoding=utf-8 -*-
+
 from PyQt4 import QtGui, QtCore
 import sys
 from urllib.request import urlretrieve
@@ -72,32 +74,43 @@ class Ventana(QtGui.QMainWindow):
 
         # ComboBox para elegir reproductor.
 
-        self.reproductorLista = QtGui.QComboBox(self)
-        self.reproductorLabel = QtGui.QLabel("Elegir reproductor:", self)
+        #self.reproductorLista = QtGui.QComboBox(self)
+        #self.reproductorLabel = QtGui.QLabel("Elegir reproductor:", self)
 
-        self.reproductorLista.addItem("VLC Media Player")
-        self.reproductorLista.addItem("MPV Media Player")
+        #self.reproductorLista.addItem("VLC Media Player")
+        #self.reproductorLista.addItem("MPV Media Player")
 
-        self.reproductorLista.activated[str].connect(self.playerSwitch)
+        #self.reproductorLista.activated[str].connect(self.playerSwitch)
 
-        self.layoutPrincipal.addWidget(self.reproductorLabel, 5, 4, 1, 1)
-        self.layoutPrincipal.addWidget(self.reproductorLista, 5, 5, 1, 1)
+        #self.layoutPrincipal.addWidget(self.reproductorLabel, 5, 4, 1, 1)
+        #self.layoutPrincipal.addWidget(self.reproductorLista, 5, 5, 1, 1)
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
+        # Pop-up para elegir reproductor.
+        self.popup = QtGui.QMessageBox(self)
+        self.popup.setText("Es necesario elegir un reproductor instalado antes de proceder.")
+        self.VLCPlayer = self.popup.addButton("VLC Media Player", QtGui.QMessageBox.ActionRole)
+        self.MPVPlayer = self.popup.addButton("MPV Media Player", QtGui.QMessageBox.ActionRole)
+        self.popup.exec()
+        if "VLC" in self.popup.clickedButton().text():
+            self.reproductorPreferido = "VLC"
+        if "MPV" in self.popup.clickedButton().text():
+            self.reproductorPreferido = "MPV"
+
         self.show()
 
     # Función de prueba para poblar el scroll principal. Eliminar/comentar para
     # publicar la aplicación o antes del merge con master!
 
-    def playerSwitch(self, text):
-        if "VLC" in text:
-            self.reproductorPreferido = "VLC"
-        if "MPV" in text:
-            self.reproductorPreferido = "MPV"
+    #def playerSwitch(self, text):
+        #if "VLC" in self.popup.clickedButton().text():
+            #self.reproductorPreferido = "VLC"
+        #if "MPV" in self.popup.clickedButton().text():
+            #self.reproductorPreferido = "MPV"
 
     def consulta(self):
 
