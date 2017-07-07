@@ -3,7 +3,7 @@
 Este proyecto fue inicializado por ColTKinG (@JuanRosario en telegram) en plan de crear
 una aplicacion de escritorio para buscar, ver, y descargar contenido de youtube...
 
-El archivo sobre el que se va a trabajar es GUIYoutbe.py ya que es el archivo que
+El archivo sobre el que se va a trabajar es GUIYoutube.py ya que es el archivo que
 tiene el codigo principal.
 
 - Los widgets para cada entrada de video se crean con objetos instanciados de VideoWidget.py.
