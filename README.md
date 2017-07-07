@@ -3,13 +3,16 @@
 este proyecto fue inicializado por ColTKinG (@JuanRosario en telegram) en plan de crear
 una aplicacion de escritorio para buscar, ver, y descargar contenido de youtube...
 
-el archivo sobre el que se va a trabajar es llamaryoutube.pyw ya que es el archivo que
-tiene el codigo principal... el archivo youtube.py tiene toda la parte grafica escrita
-en python, y youtube.ui es el archivo de diseño creado en QT Designer (que luego fue
-parseado a youtube.py)
+el archivo sobre el que se va a trabajar es GUIYyoutbe.py ya que es el archivo que
+tiene el codigo principal.
 
+- Los widgets para cada entrada de video se crean con objetos instanciados de VideoWidget.py.
+- Las consultas a la web y la construcción de enlaces se efectúan todos dentro del módulo BYT.py.
+- Las miniaturas se almacenan en .thumbs.
+- Las descargas irán a la carpeta "Descargas" (pendiente).
 
 # Dependencias:
 
-PyQT4
-requiere tambien de tener instalado youtube-dl y el reproductor mpv
+PyQt4
+VLC o MPV para reproducción.
+youtube-dl para descargar.
