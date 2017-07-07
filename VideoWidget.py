@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from PyQt4 import QtCore, QtGui
 import subprocess
+import sys
+import os
+sys.path.append(os.getcwd() + "youtube_dl")
+from youtube_dl import YoutubeDL as YT
 
 
 class VideoWidget(QtGui.QWidget):
@@ -70,4 +74,15 @@ class VideoWidget(QtGui.QWidget):
             subprocess.Popen(self.mpv)
 
     def descargar(self):
-        subprocess.Popen(self.descarga)
+        ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegVideoConvertor',
+                        'preferedformat': 'mp4'
+                        }]
+                    }
+
+        with YT(ydl_opts) as yt:
+            os.chdir("Descargas")
+            yt.download([self.descarga[0]])
+            os.chdir("..")

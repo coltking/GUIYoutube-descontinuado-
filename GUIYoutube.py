@@ -5,6 +5,7 @@ from PyQt4 import QtGui, QtCore
 import sys
 from urllib.request import urlretrieve
 
+
 # Importando clases propias
 
 from VideoWidget import *
@@ -63,10 +64,11 @@ class Ventana(QtGui.QMainWindow):
 
         self.layoutPrincipal.addWidget(self.listaDeOpciones, 3, 4, 1, 2)
 
-        self.opción1 = QtGui.QRadioButton("1 video (primer resultado, más rápido)", self)
-        self.opción2 = QtGui.QRadioButton("5 videos (primeros 5 resultados)", self)
-        self.opción3 = QtGui.QRadioButton("10 videos (primeros 10 resultados)", self)
-        self.opción4 = QtGui.QRadioButton("18-20 videos (primera página de resultados, más lento)", self)
+        self.opción1 = QtGui.QRadioButton("1 video.", self)
+        self.opción2 = QtGui.QRadioButton("5 videos.", self)
+        self.opción2.setChecked(True)
+        self.opción3 = QtGui.QRadioButton("10 videos.", self)
+        self.opción4 = QtGui.QRadioButton("Primera página.", self)
 
         self.listaLayout.addWidget(self.opción1)
         self.listaLayout.addWidget(self.opción2)

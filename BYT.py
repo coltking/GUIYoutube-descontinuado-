@@ -5,7 +5,10 @@ import os
 import urllib.request as U
 import urllib.parse
 sys.path.append(os.getcwd() + "bs4")
+sys.path.append(os.getcwd() + "youtube")
 import bs4 as bs
+from youtube_dl import YoutubeDL as YT
+
 
 class BYT():
 
@@ -55,10 +58,7 @@ class BYT():
             self.lista[tmp3] = self.duraciones[i]
             self.lista[tmpPlayMPV] = ["mpv","https://www.youtube.com/watch?v=" + self.IDs[i]]
             self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v=" + self.IDs[i]]
-            self.lista[tmpDownload] = ["youtube-dl",
-                                        "-f",
-                                        "mp4",
-                                        "https://www.youtube.com/watch?v=" + str(self.IDs[i])]
+            self.lista[tmpDownload] = ["https://www.youtube.com/watch?v=" + str(self.IDs[i])]
         # Este return debería devolver el diccionario.
         return self.lista
 
