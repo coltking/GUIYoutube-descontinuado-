@@ -28,7 +28,7 @@ class BYT():
         # Enconding link
         self.term = urllib.parse.quote(self.termFull)
         self.datos = U.urlopen("https://www.youtube.com/results?search_query=" + self.term)
-        self.soup = bs.BeautifulSoup(self.datos, "lxml")
+        self.soup = bs.BeautifulSoup(self.datos, "html.parser")
 
         for i in self.soup.body.find_all("a", class_= "yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 yt-uix-sessionlink spf-link "):
             self.títulos.append(i.get("title"))
