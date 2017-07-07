@@ -7,7 +7,7 @@ from urllib.request import urlretrieve
 
 # Importando clases propias
 
-from videoWidget import *
+from VideoWidget import *
 from BYT import *
 
 

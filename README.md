@@ -1,9 +1,9 @@
 # proyecto GUIYoutube
 
-este proyecto fue inicializado por ColTKinG (@JuanRosario en telegram) en plan de crear
+Este proyecto fue inicializado por ColTKinG (@JuanRosario en telegram) en plan de crear
 una aplicacion de escritorio para buscar, ver, y descargar contenido de youtube...
 
-el archivo sobre el que se va a trabajar es GUIYyoutbe.py ya que es el archivo que
+El archivo sobre el que se va a trabajar es GUIYoutbe.py ya que es el archivo que
 tiene el codigo principal.
 
 - Los widgets para cada entrada de video se crean con objetos instanciados de VideoWidget.py.
@@ -14,5 +14,4 @@ tiene el codigo principal.
 # Dependencias:
 
 PyQt4
-VLC o MPV para reproducción.
-youtube-dl para descargar.
+VLC o MPV para reproducción. youtube-dl para descargar.
