@@ -1,9 +1,11 @@
 # -*- encoding=utf-8 -*-
 import subprocess
+import sys
+import os
 import urllib.request as U
 import urllib.parse
+sys.path.append(os.getcwd() + "bs4")
 import bs4 as bs
-
 
 class BYT():
 
