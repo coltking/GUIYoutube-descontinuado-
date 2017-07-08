@@ -56,7 +56,7 @@ class BYT():
             self.lista[tmp1] = self.títulos[i]
             self.lista[tmp2] = self.IDs[i]
             self.lista[tmp3] = self.duraciones[i]
-            self.lista[tmpPlayMPV] = ["mpv","https://www.youtube.com/watch?v=" + self.IDs[i]]
+            self.lista[tmpPlayMPV] = ["https://www.youtube.com/watch?v=" + self.IDs[i]]
             self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v=" + self.IDs[i]]
             self.lista[tmpDownload] = ["https://www.youtube.com/watch?v=" + str(self.IDs[i])]
         # Este return debería devolver el diccionario.

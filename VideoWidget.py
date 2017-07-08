@@ -71,7 +71,10 @@ class VideoWidget(QtGui.QWidget):
         if "VLC" in self.preferido:
             subprocess.Popen(self.vlc)
         if "MPV" in self.preferido:
-            subprocess.Popen(self.mpv)
+            mpv = subprocess.Popen(["python3 youtube_dl/__main__.py " + self.mpv[0] + " -o - | mpv -"],
+                            shell=True, stdout=subprocess.PIPE)
+        while mpv.poll() is None:
+            pass
 
     def descargar(self):
         ydl_opts = {

@@ -4,6 +4,7 @@
 from PyQt4 import QtGui, QtCore
 import sys
 from urllib.request import urlretrieve
+from glob import glob
 
 
 # Importando clases propias
@@ -22,14 +23,52 @@ class Ventana(QtGui.QMainWindow):
         self.setGeometry(100, 100, 800, 500)
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
+        self.statusBar()
 
         self.páginaPrincipal()
         #self.poblarLista()
 
     def páginaPrincipal(self):
 
-        # Widget y Layout para el centro de la ventana.
+        # Barra de menu.
+        self.menuBarra = self.menuBar()
 
+        # Acciones.
+        self.acciónLimpiar = QtGui.QAction("Limpiar cache de miniaturas", self)
+        self.acciónLimpiar.setShortcut("Ctrl+Shift+L")
+        self.acciónLimpiar.setStatusTip("Limpiar el directorio de thumbnails.")
+        self.acciónLimpiar.triggered.connect(self.limpiarCache)
+
+        self.acciónSalir = QtGui.QAction("Salir de la aplicación", self)
+        self.acciónSalir.setShortcut("Ctrl+Shift+E")
+        self.acciónSalir.setStatusTip("Salir de la aplicación.")
+        self.acciónSalir.triggered.connect(self.salir)
+
+        self.acciónAbout = QtGui.QAction("Acerca del proyecto GUIYoutube", self)
+        self.acciónAbout.setStatusTip("Información sobre este proyecto.")
+
+        self.acciónElegirCalidadDeVideo = QtGui.QAction("Elegir calidad de video", self)
+        self.acciónElegirCalidadDeVideo.setStatusTip("Seleccionar la calidad por defecto de los videos buscados (No implementado aún).")
+
+        self.acciónElegirCalidadDeAudio = QtGui.QAction("Elegir calidad de sonido", self)
+        self.acciónElegirCalidadDeAudio.setStatusTip("Seleccionar la calidad por defecto del sonido en los videos buscados (No implementado aún).")
+
+        # Menú "Archivo".
+        self.menuArchivo = self.menuBarra.addMenu("Archivo")
+        self.menuArchivo.addAction(self.acciónLimpiar)
+        self.menuArchivo.addSeparator()
+        self.menuArchivo.addAction(self.acciónSalir)
+
+        # Menú "Preferencias".
+        self.menuPreferencias = self.menuBarra.addMenu("Preferencias")
+        self.menuPreferencias.addAction(self.acciónElegirCalidadDeVideo)
+        self.menuPreferencias.addAction(self.acciónElegirCalidadDeAudio)
+
+        # Menú "About".
+        self.menuAbout = self.menuBarra.addMenu("About")
+        self.menuAbout.addAction(self.acciónAbout)
+
+        # Widget y Layout para el centro de la ventana.
         self.widgetPrincipal = QtGui.QWidget(self)
         self.layoutPrincipal = QtGui.QGridLayout()
         self.widgetPrincipal.setLayout(self.layoutPrincipal)
@@ -82,6 +121,9 @@ class Ventana(QtGui.QMainWindow):
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
+        # Widget para el reproductor de video.
+
+
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox(self)
         self.popup.setText("Es necesario elegir un reproductor instalado antes de proceder.")
@@ -132,6 +174,29 @@ class Ventana(QtGui.QMainWindow):
             self.aviso.setText("")
         self.scroll.setWidget(tempWidget)
 
-app = QtGui.QApplication(sys.argv)
-win = Ventana()
-sys.exit(app.exec_())
+    def limpiarCache(self):
+        os.chdir(".thumbs")
+        thumbs = glob("*.jpg")
+        for i in thumbs:
+            os.remove(i)
+
+    def salir(self):
+        elección = QtGui.QMessageBox.question(self,
+                                    "Saliendo de la aplicación.",
+                                    "¿Está seguro que quiere salir?",
+                                    QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+        if elección == QtGui.QMessageBox.Yes:
+            sys.exit()
+        else:
+            pass
+
+    def sobreGUIYoutube(self):
+        pass
+
+
+def run():
+    app = QtGui.QApplication(sys.argv)
+    win = Ventana()
+    sys.exit(app.exec_())
+
+run()
