@@ -14,5 +14,5 @@ tiene el código principal.
 # Dependencias:
 
 - Qt4. 
-- PyQt4. -
-VLC o MPV para reproducción.
+- PyQt4. 
+- VLC o MPV para reproducción.
