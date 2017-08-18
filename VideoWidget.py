@@ -96,7 +96,7 @@ class VideoWidget(QtGui.QWidget):
     def Formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
-        self.popup.setText("Es necesario elegir un reproductor instalado antes de proceder.")
+        self.popup.setText("Seleccione un formato para su descarga.")
         self.mp3 = self.popup.addButton("MP3(audio)", QtGui.QMessageBox.ActionRole)
         self.mp4 = self.popup.addButton("MP4(video)", QtGui.QMessageBox.ActionRole)
         self.popup.exec()
