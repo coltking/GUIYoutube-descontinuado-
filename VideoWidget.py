@@ -71,21 +71,32 @@ class VideoWidget(QtGui.QWidget):
         if "VLC" in self.preferido:
             subprocess.Popen(self.vlc)
         if "MPV" in self.preferido:
-            mpv = subprocess.Popen(["python3 youtube_dl/__main__.py " + self.mpv[0] + " -o - | mpv -"],
-                            shell=True, stdout=subprocess.PIPE)
-        while mpv.poll() is None:
-            pass
+            subprocess.Popen(self.mpv)
 
     def descargar(self):
+        #Dialogo que consulta la calidad y formato
+        self.dialogo = self.Formato()
         ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
                         'key': 'FFmpegVideoConvertor',
-                        'preferedformat': 'mp4'
+                        'preferedformat': self.dialogo
                         }]
                     }
-
         with YT(ydl_opts) as yt:
             os.chdir("Descargas")
             yt.download([self.descarga[0]])
             os.chdir("..")
+            self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+    def Formato(self):
+        # Pop-up para elegir reproductor.
+        self.popup = QtGui.QMessageBox()
+        self.popup.setText("Es necesario elegir un reproductor instalado antes de proceder.")
+        self.mp3 = self.popup.addButton("MP3(audio)", QtGui.QMessageBox.ActionRole)
+        self.mp4 = self.popup.addButton("MP4(video)", QtGui.QMessageBox.ActionRole)
+        self.popup.exec()
+        if "MP3" in self.popup.clickedButton().text():
+            self.formato = "MP3"
+        if "MP4" in self.popup.clickedButton().text():
+            self.formato = "MP4"
+        return self.formato
