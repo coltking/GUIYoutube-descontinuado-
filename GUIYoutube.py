@@ -24,6 +24,7 @@ class Ventana(QtGui.QMainWindow):
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
+        
 
         self.páginaPrincipal()
         #self.poblarLista()
