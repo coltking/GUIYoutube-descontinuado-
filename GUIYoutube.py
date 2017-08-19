@@ -116,16 +116,50 @@ class Ventana(QtGui.QMainWindow):
 
         self.listaDeOpciones.setLayout(self.listaLayout)
 
-        # Lista de Opciones para calidad de MP3.
+        # Lista de Opciones para calidad de descargas.
 
-        self.calidadMp3 = QtGui.QGroupBox(self)
-        self.calidadMp3Layout = QtGui.QGridLayout(self)
+        self.widgetCalidad = QtGui.QWidget(self)
+        self.layoutCalidad = QtGui.QGridLayout(self)
+        self.layoutCalidad.setRowMinimumHeight(6, 20)
+        self.layoutCalidad.setRowMinimumHeight(2, 20)
+        self.widgetCalidad.setLayout(self.layoutCalidad)
 
-        self.layoutPrincipal.addWidget(self.calidadMp3, 3, 4, 2, 2)
+        # Etiquetas para calidad de descarga
+
+        self.etiquetaMp3 = QtGui.QLabel("Elija la calidad del archivo de audio:")
+        self.etiquetaMp4 = QtGui.QLabel("Elija la calidad del archivo de video:")
 
         # Botones para Mp3
 
-        #self.calidad
+        self.calidad1 = QtGui.QPushButton("Más baja", self)
+        self.calidad2 = QtGui.QPushButton("Más alta", self)
+
+        # Botones para Mp4
+
+        self.calidad240 = QtGui.QPushButton("240p", self)
+        self.calidad480 = QtGui.QPushButton("480p", self)
+        self.calidad720 = QtGui.QPushButton("720p", self)
+        self.calidad1080 = QtGui.QPushButton("1080p", self)
+
+        # Botón de descarga
+
+        self.botonDescarga = QtGui.QPushButton("Descargar", self)
+
+        # Agregando widgets al layout
+        self.listaDeOpciones.hide()
+        self.layoutCalidad.addWidget(self.etiquetaMp3, 0, 0, 1, 2)
+        self.layoutCalidad.addWidget(self.calidad1, 1, 0, 1, 1)
+        self.layoutCalidad.addWidget(self.calidad2, 1, 1, 1, 1)
+
+        self.layoutCalidad.addWidget(self.etiquetaMp4, 3, 0, 1, 2)
+        self.layoutCalidad.addWidget(self.calidad240, 4, 0, 1, 1)
+        self.layoutCalidad.addWidget(self.calidad480, 4, 1, 1, 1)
+        self.layoutCalidad.addWidget(self.calidad720, 5, 0, 1, 1)
+        self.layoutCalidad.addWidget(self.calidad1080, 5, 1, 1, 1)
+
+        self.layoutCalidad.addWidget(self.botonDescarga, 7, 0, 1, 2)
+
+        self.layoutPrincipal.addWidget(self.widgetCalidad, 3, 4, 2, 2)
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
@@ -133,7 +167,6 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
         # Widget para el reproductor de video.
-
 
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox(self)
