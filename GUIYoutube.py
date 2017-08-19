@@ -11,6 +11,7 @@ from glob import glob
 
 from VideoWidget import *
 from BYT import *
+from youtube_dl import YoutubeDL as YT
 
 
 class Ventana(QtGui.QMainWindow):
@@ -45,6 +46,10 @@ class Ventana(QtGui.QMainWindow):
         self.acciónSalir.setStatusTip("Salir de la aplicación.")
         self.acciónSalir.triggered.connect(self.salir)
 
+        self.acciónDescargarPorLink = QtGui.QAction("Descargar con link", self)
+        self.acciónDescargarPorLink.setShortcut("Ctrl+Shift+D")
+        self.acciónDescargarPorLink.triggered.connect(self.descargarPorLink)
+
         self.acciónAbout = QtGui.QAction("Acerca del proyecto GUIYoutube", self)
         self.acciónAbout.setStatusTip("Información sobre este proyecto.")
 
@@ -64,6 +69,10 @@ class Ventana(QtGui.QMainWindow):
         self.menuPreferencias = self.menuBarra.addMenu("Preferencias")
         self.menuPreferencias.addAction(self.acciónElegirCalidadDeVideo)
         self.menuPreferencias.addAction(self.acciónElegirCalidadDeAudio)
+
+        # Menú "Herramientas".
+        self.menuHerramientas = self.menuBarra.addMenu("Herramientas")
+        self.menuHerramientas.addAction(self.acciónDescargarPorLink)
 
         # Menú "About".
         self.menuAbout = self.menuBarra.addMenu("About")
@@ -122,6 +131,10 @@ class Ventana(QtGui.QMainWindow):
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
+        
+
+
+
         # Widget para el reproductor de video.
 
 
@@ -137,6 +150,18 @@ class Ventana(QtGui.QMainWindow):
             self.reproductorPreferido = "MPV"
 
         self.show()
+    def Formato(self):
+        # Pop-up para elegir reproductor.
+        self.popup = QtGui.QMessageBox()
+        self.popup.setText("Seleccione un formato para su descarga.")
+        self.mp3 = self.popup.addButton("MP3(audio)", QtGui.QMessageBox.ActionRole)
+        self.mp4 = self.popup.addButton("MP4(video)", QtGui.QMessageBox.ActionRole)
+        self.popup.exec()
+        if "MP3" in self.popup.clickedButton().text():
+            self.formato = "MP3"
+        if "MP4" in self.popup.clickedButton().text():
+            self.formato = "MP4"
+        return self.formato
 
     def consulta(self):
 
@@ -157,6 +182,44 @@ class Ventana(QtGui.QMainWindow):
         self.resultados = objetoBúsqueda.obtenerDatos()
 
         self.poblarLista(self.resultados, self.cantidad)
+
+
+    def descargarPorLink(self):
+        self.tmplink = QtGui.QInputDialog.getText(self, 'Descargar con link:', 'Ingrese link:')
+        self.link = self.tmplink[0]
+        print(self.link)
+        self.dialogo = self.Formato()
+        ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegVideoConvertor',
+                        'preferedformat': self.dialogo
+                        }]
+                    }
+        with YT(ydl_opts) as yt:
+            homedir = os.getenv("HOME")
+            exdir = os.getcwd() #exdir es el directorio actual, se guarda para saber donde volver una vez completada la descarga
+            #print(exdir)
+            if not os.path.exists(homedir+ "/Descargas/GUIYoutube"): os.makedirs(homedir+"/Descargas/GUIYoutube")
+            os.chdir(homedir+"/Descargas/GUIYoutube")
+            #print(os.getcwd())
+            yt.download([self.link])
+            os.chdir(exdir)
+            self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+
+
+    def Formato(self):
+        # Pop-up para elegir reproductor.
+        self.popup = QtGui.QMessageBox()
+        self.popup.setText("Seleccione un formato para su descarga.")
+        self.mp3 = self.popup.addButton("MP3(audio)", QtGui.QMessageBox.ActionRole)
+        self.mp4 = self.popup.addButton("MP4(video)", QtGui.QMessageBox.ActionRole)
+        self.popup.exec()
+        if "MP3" in self.popup.clickedButton().text():
+            self.formato = "MP3"
+        if "MP4" in self.popup.clickedButton().text():
+            self.formato = "MP4"
+        return self.formato
 
     def poblarLista(self, resultados, cantidad):
 
