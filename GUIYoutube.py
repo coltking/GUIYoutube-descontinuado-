@@ -125,7 +125,7 @@ class Ventana(QtGui.QMainWindow):
 
         # Botones para Mp3
 
-        self.calidad
+        #self.calidad
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
