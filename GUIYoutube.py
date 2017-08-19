@@ -24,7 +24,7 @@ class Ventana(QtGui.QMainWindow):
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
-        
+
 
         self.páginaPrincipal()
         #self.poblarLista()
@@ -84,10 +84,9 @@ class Ventana(QtGui.QMainWindow):
 
         # LineEdit para el término de búsqueda.Ventana
 
-        self.términoDeBúsqueda = QtGui.QLineEdit("Término de búsqueda", self)
-
-        #usar Intro en el line edit por alguna razón no actualiza el label. Comentado por ahora.
-        #self.términoDeBúsqueda.returnPressed.connect(self.consulta)
+        self.términoDeBúsqueda = QtGui.QLineEdit(self)
+        self.términoDeBúsqueda.setPlaceholderText("Ingrese el término de búsqueda.")
+        self.términoDeBúsqueda.returnPressed.connect(self.consulta)
 
         self.layoutPrincipal.addWidget(self.términoDeBúsqueda, 0, 4, 1, 2)
 
@@ -102,7 +101,7 @@ class Ventana(QtGui.QMainWindow):
         self.listaDeOpciones = QtGui.QGroupBox("Selecciona la cantidad de videos a buscar:", self)
         self.listaLayout = QtGui.QVBoxLayout(self)
 
-        self.layoutPrincipal.addWidget(self.listaDeOpciones, 3, 4, 1, 2)
+        self.layoutPrincipal.addWidget(self.listaDeOpciones, 3, 4, 2, 2)
 
         self.opción1 = QtGui.QRadioButton("1 video.", self)
         self.opción2 = QtGui.QRadioButton("5 videos.", self)
@@ -116,6 +115,17 @@ class Ventana(QtGui.QMainWindow):
         self.listaLayout.addWidget(self.opción4)
 
         self.listaDeOpciones.setLayout(self.listaLayout)
+
+        # Lista de Opciones para calidad de MP3.
+
+        self.calidadMp3 = QtGui.QGroupBox(self)
+        self.calidadMp3Layout = QtGui.QGridLayout(self)
+
+        self.layoutPrincipal.addWidget(self.calidadMp3, 3, 4, 2, 2)
+
+        # Botones para Mp3
+
+        self.calidad
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
@@ -140,6 +150,10 @@ class Ventana(QtGui.QMainWindow):
 
     def consulta(self):
 
+        self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
+        QtGui.QApplication.processEvents()
+        # Es necesario duplicar las órdenes para que se actualice el label de aviso
+        # de búsqueda cuando se usa enter, sino no responde.
         self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
         QtGui.QApplication.processEvents()
 
