@@ -83,6 +83,7 @@ class VideoWidget(QtGui.QWidget):
                         'preferedformat': self.dialogo
                         }]
                     }
+
         with YT(ydl_opts) as yt:
             homedir = os.getenv("HOME")
             exdir = os.getcwd() #exdir es el directorio actual, se guarda para saber donde volver una vez completada la descarga
@@ -93,6 +94,8 @@ class VideoWidget(QtGui.QWidget):
             yt.download([self.descarga[0]])
             os.chdir(exdir)
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+
+            
     def Formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
