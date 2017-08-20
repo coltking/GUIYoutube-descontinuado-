@@ -129,6 +129,7 @@ class Ventana(QtGui.QMainWindow):
         # Lista de Opciones para calidad de descargas.
 
         self.widgetCalidad = QtGui.QGroupBox(self)
+        self.widgetCalidad.hide()
         self.layoutCalidad = QtGui.QGridLayout(self)
         self.layoutCalidad.setRowMinimumHeight(6, 20)
         self.layoutCalidad.setRowMinimumHeight(2, 20)
@@ -170,9 +171,10 @@ class Ventana(QtGui.QMainWindow):
         # Botón de descarga
 
         self.botonDescarga = QtGui.QPushButton("Descargar", self)
+        self.botonDescarga.clicked.connect(self.seleccionDeCantidad)
 
         # Agregando widgets al layout
-        self.listaDeOpciones.hide()
+
         self.layoutCalidad.addWidget(self.etiquetaMp3, 0, 0, 1, 2)
         self.layoutCalidad.addWidget(self.calidad1, 1, 0, 1, 1)
         self.layoutCalidad.addWidget(self.calidad2, 1, 1, 1, 1)
@@ -342,6 +344,14 @@ class Ventana(QtGui.QMainWindow):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad240.setChecked(False)
+
+    def seleccionDeCalidad(self):
+        self.listaDeOpciones.hide()
+        self.widgetCalidad.show()
+
+    def seleccionDeCantidad(self):
+        self.widgetCalidad.hide()
+        self.listaDeOpciones.show()
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")

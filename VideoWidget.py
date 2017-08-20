@@ -74,13 +74,15 @@ class VideoWidget(QtGui.QWidget):
             subprocess.Popen(self.mpv)
 
     def descargar(self):
+        self.parent().parent().parent().parent().parent().seleccionDeCalidad()
         #Dialogo que consulta la calidad y formato
-        self.dialogo = self.formato()
+        #self.dialogo = self.formato()
+        """
         ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
                         'key': 'FFmpegVideoConvertor',
-                        'preferedformat': self.dialogo
+                        'preferedformat': 'mp4'
                         }]
                     }
 
@@ -92,8 +94,8 @@ class VideoWidget(QtGui.QWidget):
             os.chdir(homedir+"/Descargas/GUIYoutube")
             #print(os.getcwd())
             yt.download([self.descarga[0]])
-            os.chdir(exdir)
-            self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+            os.chdir(exdir)"""
+            #self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
 
 
     def formato(self):
