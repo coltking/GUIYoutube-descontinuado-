@@ -75,6 +75,7 @@ class VideoWidget(QtGui.QWidget):
 
     def descargar(self):
         self.parent().parent().parent().parent().parent().seleccionDeCalidad()
+        self.parent().parent().parent().parent().parent().link = self.descarga[0]
         #Dialogo que consulta la calidad y formato
         #self.dialogo = self.formato()
         """

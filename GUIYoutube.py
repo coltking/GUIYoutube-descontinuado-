@@ -16,6 +16,7 @@ from youtube_dl import YoutubeDL as YT
 
 class Ventana(QtGui.QMainWindow):
 
+
     def __init__(self):
         super(Ventana, self).__init__()
         self.ver = "0.1 Alpha"
@@ -26,6 +27,10 @@ class Ventana(QtGui.QMainWindow):
         self.reproductorPreferido = "VLC"
         self.statusBar()
         self.setObjectName("Ventana Principal")
+
+        self.format = ""
+        self.preferedformat = ""
+        self.link = ""
 
 
         self.páginaPrincipal()
@@ -247,15 +252,11 @@ class Ventana(QtGui.QMainWindow):
 
 
     def descargarPorLink(self):
-        self.tmplink = QtGui.QInputDialog.getText(self, 'Descargar con link:', 'Ingrese link:')
-        self.link = self.tmplink[0]
-        print(self.link)
-        self.dialogo = self.formato()
         ydl_opts = {
-                    'format': 'bestaudio/best',
+                    'format': self.format,
                     'postprocessors': [{
                         'key': 'FFmpegVideoConvertor',
-                        'preferedformat': self.dialogo
+                        'preferedformat': self.preferedformat
                         }]
                     }
         with YT(ydl_opts) as yt:
@@ -321,35 +322,51 @@ class Ventana(QtGui.QMainWindow):
 
     def revisarCalidad1(self):
         self.calidad2.setChecked(False)
-
+        self.format = "worstaudio"
+        self.preferedformat = "mp3"
+        
     def revisarCalidad2(self):
         self.calidad1.setChecked(False)
+        self.format = "bestaudio"
+        self.preferedformat = "mp3"
 
     def revisar240(self):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
+        self.format = "bestvideo[height<=?240]+bestaudio/best"
+        self.preferedformat = "mp4"
 
     def revisar480(self):
         self.calidad240.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
+        self.format = "bestvideo[height<=?480]+bestaudio/best"
+        self.preferedformat = "mp4"
 
     def revisar720(self):
         self.calidad480.setChecked(False)
         self.calidad240.setChecked(False)
         self.calidad1080.setChecked(False)
+        self.format = "bestvideo[height<=?720]+bestaudio/best"
+        self.preferedformat = "mp4"
 
     def revisar1080(self):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad240.setChecked(False)
+        self.format = "bestvideo[height<=?1080]+bestaudio/best"
+        self.preferedformat = "mp4"
 
     def seleccionDeCalidad(self):
         self.listaDeOpciones.hide()
         self.widgetCalidad.show()
 
     def seleccionDeCantidad(self):
+        self.descargarPorLink()
+        self.link = ""
+        self.format = ""
+        self.preferedformat = ""
         self.widgetCalidad.hide()
         self.listaDeOpciones.show()
 
