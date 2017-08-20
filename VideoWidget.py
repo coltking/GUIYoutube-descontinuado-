@@ -75,7 +75,7 @@ class VideoWidget(QtGui.QWidget):
 
     def descargar(self):
         #Dialogo que consulta la calidad y formato
-        self.dialogo = self.Formato()
+        self.dialogo = self.formato()
         ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
@@ -95,8 +95,8 @@ class VideoWidget(QtGui.QWidget):
             os.chdir(exdir)
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
 
-            
-    def Formato(self):
+
+    def formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
         self.popup.setText("Seleccione un formato para su descarga.")
@@ -108,3 +108,10 @@ class VideoWidget(QtGui.QWidget):
         if "MP4" in self.popup.clickedButton().text():
             self.formato = "MP4"
         return self.formato
+
+
+"""
+Lo siguiente es el nivel que hay que subir para alcanzar la ventana principal. No borrar!!!!!!!!
+
+self.parent().parent().parent().parent().parent().printerFunc()
+"""

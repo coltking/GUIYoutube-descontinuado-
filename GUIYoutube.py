@@ -25,6 +25,7 @@ class Ventana(QtGui.QMainWindow):
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
+        self.setObjectName("Ventana Principal")
 
 
         self.páginaPrincipal()
@@ -127,7 +128,7 @@ class Ventana(QtGui.QMainWindow):
 
         # Lista de Opciones para calidad de descargas.
 
-        self.widgetCalidad = QtGui.QWidget(self)
+        self.widgetCalidad = QtGui.QGroupBox(self)
         self.layoutCalidad = QtGui.QGridLayout(self)
         self.layoutCalidad.setRowMinimumHeight(6, 20)
         self.layoutCalidad.setRowMinimumHeight(2, 20)
@@ -141,14 +142,30 @@ class Ventana(QtGui.QMainWindow):
         # Botones para Mp3
 
         self.calidad1 = QtGui.QPushButton("Más baja", self)
+        self.calidad1.setCheckable(True)
+        self.calidad1.clicked.connect(self.revisarCalidad1)
+
         self.calidad2 = QtGui.QPushButton("Más alta", self)
+        self.calidad2.setCheckable(True)
+        self.calidad2.clicked.connect(self.revisarCalidad2)
 
         # Botones para Mp4
 
         self.calidad240 = QtGui.QPushButton("240p", self)
+        self.calidad240.setCheckable(True)
+        self.calidad240.clicked.connect(self.revisar240)
+
         self.calidad480 = QtGui.QPushButton("480p", self)
+        self.calidad480.setCheckable(True)
+        self.calidad480.clicked.connect(self.revisar480)
+
         self.calidad720 = QtGui.QPushButton("720p", self)
+        self.calidad720.setCheckable(True)
+        self.calidad720.clicked.connect(self.revisar720)
+
         self.calidad1080 = QtGui.QPushButton("1080p", self)
+        self.calidad1080.setCheckable(True)
+        self.calidad1080.clicked.connect(self.revisar1080)
 
         # Botón de descarga
 
@@ -175,10 +192,6 @@ class Ventana(QtGui.QMainWindow):
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
-        
-
-
-
         # Widget para el reproductor de video.
 
         # Pop-up para elegir reproductor.
@@ -193,7 +206,7 @@ class Ventana(QtGui.QMainWindow):
             self.reproductorPreferido = "MPV"
 
         self.show()
-    def Formato(self):
+    def formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
         self.popup.setText("Seleccione un formato para su descarga.")
@@ -235,7 +248,7 @@ class Ventana(QtGui.QMainWindow):
         self.tmplink = QtGui.QInputDialog.getText(self, 'Descargar con link:', 'Ingrese link:')
         self.link = self.tmplink[0]
         print(self.link)
-        self.dialogo = self.Formato()
+        self.dialogo = self.formato()
         ydl_opts = {
                     'format': 'bestaudio/best',
                     'postprocessors': [{
@@ -255,7 +268,7 @@ class Ventana(QtGui.QMainWindow):
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
 
 
-    def Formato(self):
+    def formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
         self.popup.setText("Seleccione un formato para su descarga.")
@@ -303,6 +316,36 @@ class Ventana(QtGui.QMainWindow):
 
     def sobreGUIYoutube(self):
         pass
+
+    def revisarCalidad1(self):
+        self.calidad2.setChecked(False)
+
+    def revisarCalidad2(self):
+        self.calidad1.setChecked(False)
+
+    def revisar240(self):
+        self.calidad480.setChecked(False)
+        self.calidad720.setChecked(False)
+        self.calidad1080.setChecked(False)
+
+    def revisar480(self):
+        self.calidad240.setChecked(False)
+        self.calidad720.setChecked(False)
+        self.calidad1080.setChecked(False)
+
+    def revisar720(self):
+        self.calidad480.setChecked(False)
+        self.calidad240.setChecked(False)
+        self.calidad1080.setChecked(False)
+
+    def revisar1080(self):
+        self.calidad480.setChecked(False)
+        self.calidad720.setChecked(False)
+        self.calidad240.setChecked(False)
+
+    #def printerFunc(self):
+        #print("Yay!!...You've hit the sweet spot!!!!!!")
+
 
 
 def run():
