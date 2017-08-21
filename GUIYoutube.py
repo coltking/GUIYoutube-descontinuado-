@@ -334,28 +334,28 @@ class Ventana(QtGui.QMainWindow):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height<=?240]+bestaudio/best"
+        self.format = "bestvideo[height=240]+bestaudio/best"
         self.preferedformat = "mp4"
 
     def revisar480(self):
         self.calidad240.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height<=?480]+bestaudio/best"
+        self.format = "bestvideo[height=480]+bestaudio/best"
         self.preferedformat = "mp4"
 
     def revisar720(self):
         self.calidad480.setChecked(False)
         self.calidad240.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height<=?720]+bestaudio/best"
+        self.format = "bestvideo[height=720]+bestaudio/best"
         self.preferedformat = "mp4"
 
     def revisar1080(self):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad240.setChecked(False)
-        self.format = "bestvideo[height<=?1080]+bestaudio/best"
+        self.format = "bestvideo[height=1080]+bestaudio/best"
         self.preferedformat = "mp4"
 
     def seleccionDeCalidad(self):
@@ -363,12 +363,15 @@ class Ventana(QtGui.QMainWindow):
         self.widgetCalidad.show()
 
     def seleccionDeCantidad(self):
-        self.descargarPorLink()
-        self.link = ""
-        self.format = ""
-        self.preferedformat = ""
-        self.widgetCalidad.hide()
-        self.listaDeOpciones.show()
+        if self.format != "" or self.preferedformat != "":
+            self.descargarPorLink()
+            self.link = ""
+            self.format = ""
+            self.preferedformat = ""
+            self.widgetCalidad.hide()
+            self.listaDeOpciones.show()
+        else:
+            self.popup = QtGui.QMessageBox.information(self, "Informacion", """No se ha seleccionado una calidad de audio/video""",QtGui.QMessageBox.Ok)
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")
