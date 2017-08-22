@@ -324,7 +324,7 @@ class Ventana(QtGui.QMainWindow):
         self.calidad2.setChecked(False)
         self.format = "worstaudio"
         self.preferedformat = "mp3"
-        
+
     def revisarCalidad2(self):
         self.calidad1.setChecked(False)
         self.format = "bestaudio"
@@ -334,28 +334,28 @@ class Ventana(QtGui.QMainWindow):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height=240]+bestaudio/best"
+        self.format = "bestvideo[height=240]+bestaudio"
         self.preferedformat = "mp4"
 
     def revisar480(self):
         self.calidad240.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height=480]+bestaudio/best"
+        self.format = "bestvideo[height=480]+bestaudio"
         self.preferedformat = "mp4"
 
     def revisar720(self):
         self.calidad480.setChecked(False)
         self.calidad240.setChecked(False)
         self.calidad1080.setChecked(False)
-        self.format = "bestvideo[height=720]+bestaudio/best"
+        self.format = "bestvideo[height=720]+bestaudio"
         self.preferedformat = "mp4"
 
     def revisar1080(self):
         self.calidad480.setChecked(False)
         self.calidad720.setChecked(False)
         self.calidad240.setChecked(False)
-        self.format = "bestvideo[height=1080]+bestaudio/best"
+        self.format = "bestvideo[height=1080]+bestaudio"
         self.preferedformat = "mp4"
 
     def seleccionDeCalidad(self):
