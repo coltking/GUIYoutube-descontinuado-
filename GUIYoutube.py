@@ -54,7 +54,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.acciónDescargarPorLink = QtGui.QAction("Descargar con link", self)
         self.acciónDescargarPorLink.setShortcut("Ctrl+Shift+D")
-        self.acciónDescargarPorLink.triggered.connect(self.descargarPorLink)
+        self.acciónDescargarPorLink.triggered.connect(self.descargaporlinkparametros)
 
         self.acciónAbout = QtGui.QAction("Acerca del proyecto GUIYoutube", self)
         self.acciónAbout.setStatusTip("Información sobre este proyecto.")
@@ -250,7 +250,16 @@ class Ventana(QtGui.QMainWindow):
 
         self.poblarLista(self.resultados, self.cantidad)
 
-
+    def descargaporlinkparametros(self):
+        tmp = QtGui.QInputDialog.getText(self, 'GUIYoutube', 'Ingrese link:')
+        if tmp[1]:
+        	self.listaDeOpciones.hide()
+        	self.widgetCalidad.show()
+        	self.link = tmp[0]
+        else:
+        	pass
+        
+        
     def descargarPorLink(self):
         ydl_opts = {
                     'format': self.format,
