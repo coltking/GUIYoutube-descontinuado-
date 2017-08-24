@@ -297,7 +297,8 @@ class Ventana(QtGui.QMainWindow):
             #print(os.getcwd())
             yt.download([self.link])
             os.chdir(exdir)
-            self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+            #self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
+            subprocess.Popen(["notify-send", "-t","4000", "\"Descarga finalizada (revise su carpeta de descargas)\""])
 
 
     def formato(self):
