@@ -27,6 +27,7 @@ class Ventana(QtGui.QMainWindow):
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
+        self.statusBar().setStyleSheet("background-color:grey")
         self.setObjectName("Ventana Principal")
 
         self.reproductor = ""
@@ -100,7 +101,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.scroll = QtGui.QScrollArea(self)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setMinimumSize(570, 100)
+        self.scroll.setMinimumWidth(600)
         self.layoutPrincipal.addWidget(self.scroll, 0, 0, 6, 4)
 
         # LineEdit para el término de búsqueda.Ventana
@@ -119,14 +120,14 @@ class Ventana(QtGui.QMainWindow):
 
         # Botón para descargar por link
 
-        self.descargarLinkBtn = QtGui.QPushButton("Descargar con link",self)
-        self.layoutPrincipal.addWidget(self.descargarLinkBtn,1,4,1,1)
+        self.descargarLinkBtn = QtGui.QPushButton("Descargar con link", self)
+        self.layoutPrincipal.addWidget(self.descargarLinkBtn, 1, 4, 1, 1)
         self.descargarLinkBtn.pressed.connect(self.descargaporlinkparametros)
 
         # Lista de opciones para número de búsquedas.
 
         self.listaDeOpciones = QtGui.QGroupBox("Selecciona la cantidad de videos a buscar:", self)
-        self.listaLayout = QtGui.QVBoxLayout(self)
+        self.listaLayout = QtGui.QGridLayout(self)
 
         self.layoutPrincipal.addWidget(self.listaDeOpciones, 3, 4, 2, 2)
 
@@ -136,10 +137,10 @@ class Ventana(QtGui.QMainWindow):
         self.opción3 = QtGui.QRadioButton("10 videos.", self)
         self.opción4 = QtGui.QRadioButton("Primera página.", self)
 
-        self.listaLayout.addWidget(self.opción1)
-        self.listaLayout.addWidget(self.opción2)
-        self.listaLayout.addWidget(self.opción3)
-        self.listaLayout.addWidget(self.opción4)
+        self.listaLayout.addWidget(self.opción1, 0, 0, 1, 1)
+        self.listaLayout.addWidget(self.opción2, 0, 1, 1, 1)
+        self.listaLayout.addWidget(self.opción3, 1, 0, 1, 1)
+        self.listaLayout.addWidget(self.opción4, 1, 1, 1, 1)
 
         self.listaDeOpciones.setLayout(self.listaLayout)
 
@@ -204,14 +205,17 @@ class Ventana(QtGui.QMainWindow):
 
         self.layoutCalidad.addWidget(self.botonDescarga, 7, 0, 1, 2)
 
-        self.layoutPrincipal.addWidget(self.widgetCalidad, 3, 4, 2, 2)
+        self.layoutPrincipal.addWidget(self.widgetCalidad, 3, 4, 1, 2)
 
         # Label para mostrar el progreso de las operaciones
         self.aviso = QtGui.QLabel(self)
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
-        # Widget para el reproductor de video.
+        # Dummy
+        self.dummy = QtGui.QWidget(self)
+        #self.dummy.setStyleSheet("background-color:white")
+        self.layoutPrincipal.addWidget(self.dummy, 5, 4, 1, 2)
 
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox(self)
@@ -270,15 +274,6 @@ class Ventana(QtGui.QMainWindow):
         else:
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """No ha ingresado una url valida""",QtGui.QMessageBox.Ok)
 
-    #def descargaporlinkparametros(self):
-        #tmp = QtGui.QInputDialog.getText(self, 'GUIYoutube', 'Ingrese link:')
-        #if tmp[1]:
-        	#self.listaDeOpciones.hide()
-        	#self.widgetCalidad.show()
-        	#self.link = tmp[0]
-        #else:
-        	#pass
-
 
     def descargarPorLink(self):
         ydl_opts = {
@@ -298,7 +293,7 @@ class Ventana(QtGui.QMainWindow):
             yt.download([self.link])
             os.chdir(exdir)
             #self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
-            subprocess.Popen(["notify-send", "-t","4000", "\"Descarga finalizada (revise su carpeta de descargas)\""])
+            subprocess.Popen(["notify-send", "-t","4000", "Descarga finalizada (revise su carpeta de descargas)"])
 
 
     def formato(self):
@@ -408,29 +403,48 @@ class Ventana(QtGui.QMainWindow):
 
     def crearReproductorDeMusica(self, descarga, thumbNumero, titulo):
         if not self.reproductorActivo:
+            self.statusBar().showMessage("Creando reproductor y medios de audio")
             self.reproductor = RM(descarga, thumbNumero, titulo)
 
-            if not self.reproductorActivo:
-                self.reproductorActivo = True
-                self.reconstruirScrolledArea()
+            self.reproductorActivo = True
+            self.reconstruirScrolledArea()
 
-            self.layoutPrincipal.addWidget(self.reproductor, 3, 0, 2, 6)
+            self.layoutPrincipal.addWidget(self.reproductor, 5, 0, 1, 4)
+
+            QtGui.QApplication.processEvents()
+            self.reproductor.construirMedio()
+            self.statusBar().showMessage("")
 
         elif self.reproductorActivo:
-            self.reproductor.cambiarMedio(descarga, thumbNumero, titulo)
+            self.statusBar().showMessage("Cambiando de medio de reproducción", 2000)
+            QtGui.QApplication.processEvents()
+            hayMedioNuevo = self.reproductor.cambiarMedio(descarga, thumbNumero, titulo)
+
 
     def reconstruirScrolledArea(self):
         # Se elimina el scrolled area original.
-        self.layoutPrincipal.removeWidget(self.scroll)
         self.scroll.hide()
 
         # Nuevo y más pequeño scrolled area.
         self.scrollPequeno = QtGui.QScrollArea(self)
         self.scrollPequeno.setWidgetResizable(True)
-        self.scrollPequeno.setMinimumSize(570, 100)
-        self.layoutPrincipal.addWidget(self.scrollPequeno, 0, 0, 3, 4)
+        self.scrollPequeno.setMinimumWidth(600)
+        self.layoutPrincipal.addWidget(self.scrollPequeno, 0, 0, 5, 4)
 
         # Recreando los widgets de video
+        self.poblarLista(self.resultados, self.cantidad)
+
+    def destruirReproductorDeMusica(self):
+        self.reproductorActivo = False
+        print("Destruyendo reproductor")
+        # Se elimina el scrolled area pequeno
+        self.scrollPequeno.hide()
+        self.reproductor.hide()
+
+        # Se restaura el scrolled grande
+        self.scroll.show()
+
+        # Recreando widgets de video
         self.poblarLista(self.resultados, self.cantidad)
 
 

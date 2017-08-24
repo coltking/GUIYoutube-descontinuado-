@@ -23,35 +23,38 @@ class reproductorDeMusica(QtGui.QWidget):
         self.instancia = vlc.Instance()
         self.reproductor = self.instancia.media_player_new()
 
+        # Widget del reproductor
+        self.construirWidget()
+
+    def construirMedio(self):
         self.medio = self.buscarEnlace()
         self.stream = self.instancia.media_new("https" + self.medio[-1][:-1])
 
         self.reproductor.set_media(self.stream)
         self.reproductor.audio_set_volume(100)
 
-        # Widget del reproductor
-        self.construirWidget()
-        self.reproductor.play()
+        self.play()
 
     def construirWidget(self):
         # Reproductor
-        self.contenedor = QtGui.QFrame(self)
+        #self.contenedor = QtGui.QFrame(self)
         self.contenedorLayout = QtGui.QGridLayout(self)
-        self.contenedor.setLayout(self.contenedorLayout)
+        self.contenedorLayout.setContentsMargins(0, 0, 0, 0)
+        #self.contenedor.setLayout(self.contenedorLayout)
 
         # Thumbnail
         thumb = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
         self.miniaturaFrame = QtGui.QLabel( self)
         self.miniaturaFrame.setPixmap(thumb)
         self.miniaturaFrame.setScaledContents(True)
-        self.miniaturaFrame.setMaximumWidth(220)
-        self.miniaturaFrame.setMaximumHeight(120)
+        self.miniaturaFrame.setMaximumWidth(170)
+        self.miniaturaFrame.setMaximumHeight(90)
         self.contenedorLayout.addWidget(self.miniaturaFrame, 0, 0, 2, 2)
 
         # Título
         self.tituloWidget = QtGui.QLabel(self.titulo, self)
         self.tituloWidget.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.contenedorLayout.addWidget(self.tituloWidget, 0, 3, 1, 3)
+        self.contenedorLayout.addWidget(self.tituloWidget, 0, 3, 1, 4)
 
         # Botones
         self.playBoton = QtGui.QPushButton(self)
@@ -94,6 +97,7 @@ class reproductorDeMusica(QtGui.QWidget):
     def stop(self):
         self.reproductor.stop()
         self.playBoton.setIcon(self.playIcono)
+        self.parent().parent().destruirReproductorDeMusica()
 
     def adelante(self):
         pass
@@ -117,3 +121,5 @@ class reproductorDeMusica(QtGui.QWidget):
         self.reproductor.set_media(self.streamNuevo)
         self.miniaturaFrame.setPixmap(thumbNuevo)
         self.play()
+
+        return True
