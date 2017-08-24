@@ -117,6 +117,12 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.buscarBtn, 1, 5, 1, 1)
         self.buscarBtn.pressed.connect(self.consulta)
 
+        # Botón para descargar por link
+
+        self.descargarLinkBtn = QtGui.QPushButton("Descargar con link",self)
+        self.layoutPrincipal.addWidget(self.descargarLinkBtn,1,4,1,1)
+        self.descargarLinkBtn.pressed.connect(self.descargaporlinkparametros)
+
         # Lista de opciones para número de búsquedas.
 
         self.listaDeOpciones = QtGui.QGroupBox("Selecciona la cantidad de videos a buscar:", self)
@@ -257,13 +263,21 @@ class Ventana(QtGui.QMainWindow):
         self.poblarLista(self.resultados, self.cantidad)
 
     def descargaporlinkparametros(self):
-        tmp = QtGui.QInputDialog.getText(self, 'GUIYoutube', 'Ingrese link:')
-        if tmp[1]:
-        	self.listaDeOpciones.hide()
-        	self.widgetCalidad.show()
-        	self.link = tmp[0]
+        if "//www.youtube.com/watch" in self.términoDeBúsqueda.text():
+            self.listaDeOpciones.hide()
+            self.widgetCalidad.show()
+            self.link = self.términoDeBúsqueda.text()
         else:
-        	pass
+            self.popup = QtGui.QMessageBox.information(self, "Informacion", """No ha ingresado una url valida""",QtGui.QMessageBox.Ok)
+
+    #def descargaporlinkparametros(self):
+        #tmp = QtGui.QInputDialog.getText(self, 'GUIYoutube', 'Ingrese link:')
+        #if tmp[1]:
+        	#self.listaDeOpciones.hide()
+        	#self.widgetCalidad.show()
+        	#self.link = tmp[0]
+        #else:
+        	#pass
 
 
     def descargarPorLink(self):
