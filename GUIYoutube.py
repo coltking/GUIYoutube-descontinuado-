@@ -12,6 +12,7 @@ from glob import glob
 from VideoWidget import *
 from BYT import *
 from youtube_dl import YoutubeDL as YT
+from ReproductorDeMusica import reproductorDeMusica as RM
 
 
 class Ventana(QtGui.QMainWindow):
@@ -22,21 +23,25 @@ class Ventana(QtGui.QMainWindow):
         self.ver = "0.1 Alpha"
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setWindowIcon(QtGui.QIcon("Youtube.ico"))
-        self.setGeometry(100, 100, 800, 500)
+        self.setGeometry(100, 100, 1000, 500)
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
         self.setObjectName("Ventana Principal")
 
+        self.reproductor = ""
+        self.reproductorActivo = False
+
         self.format = ""
         self.preferedformat = ""
         self.link = ""
+        self.resultados = ""
+        self.cantidad = ""
 
-
-        self.páginaPrincipal()
+        self.paginaPrincipal()
         #self.poblarLista()
 
-    def páginaPrincipal(self):
+    def paginaPrincipal(self):
 
         # Barra de menu.
         self.menuBarra = self.menuBar()
@@ -86,7 +91,8 @@ class Ventana(QtGui.QMainWindow):
 
         # Widget y Layout para el centro de la ventana.
         self.widgetPrincipal = QtGui.QWidget(self)
-        self.layoutPrincipal = QtGui.QGridLayout()
+        self.widgetPrincipal.setMinimumSize(950, 500)
+        self.layoutPrincipal = QtGui.QGridLayout(self)
         self.widgetPrincipal.setLayout(self.layoutPrincipal)
         self.setCentralWidget(self.widgetPrincipal)
 
@@ -94,7 +100,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.scroll = QtGui.QScrollArea(self)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setMinimumSize(550, 300)
+        self.scroll.setMinimumSize(570, 100)
         self.layoutPrincipal.addWidget(self.scroll, 0, 0, 6, 4)
 
         # LineEdit para el término de búsqueda.Ventana
@@ -108,7 +114,7 @@ class Ventana(QtGui.QMainWindow):
         # Botón Buscar para búsqueda.
 
         self.buscarBtn = QtGui.QPushButton("Buscar en YT", self)
-        self.layoutPrincipal.addWidget(self.buscarBtn, 1, 5, 1, -1)
+        self.layoutPrincipal.addWidget(self.buscarBtn, 1, 5, 1, 1)
         self.buscarBtn.pressed.connect(self.consulta)
 
         # Lista de opciones para número de búsquedas.
@@ -258,8 +264,8 @@ class Ventana(QtGui.QMainWindow):
         	self.link = tmp[0]
         else:
         	pass
-        
-        
+
+
     def descargarPorLink(self):
         ydl_opts = {
                     'format': self.format,
@@ -308,7 +314,10 @@ class Ventana(QtGui.QMainWindow):
                                     self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
             self.aviso.setText("")
-        self.scroll.setWidget(tempWidget)
+        if self.reproductorActivo:
+            self.scrollPequeno.setWidget(tempWidget)
+        else:
+            self.scroll.setWidget(tempWidget)
 
     def limpiarCache(self):
         os.chdir(".thumbs")
@@ -381,6 +390,35 @@ class Ventana(QtGui.QMainWindow):
             self.listaDeOpciones.show()
         else:
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """No se ha seleccionado una calidad de audio/video""",QtGui.QMessageBox.Ok)
+
+    def crearReproductorDeMusica(self, descarga, thumbNumero, titulo):
+        if not self.reproductorActivo:
+            self.reproductor = RM(descarga, thumbNumero, titulo)
+
+            if not self.reproductorActivo:
+                self.reproductorActivo = True
+                self.reconstruirScrolledArea()
+
+            self.layoutPrincipal.addWidget(self.reproductor, 3, 0, 2, 6)
+
+        elif self.reproductorActivo:
+            self.reproductor.cambiarMedio(descarga, thumbNumero, titulo)
+
+    def reconstruirScrolledArea(self):
+        # Se elimina el scrolled area original.
+        self.layoutPrincipal.removeWidget(self.scroll)
+        self.scroll.hide()
+
+        # Nuevo y más pequeño scrolled area.
+        self.scrollPequeno = QtGui.QScrollArea(self)
+        self.scrollPequeno.setWidgetResizable(True)
+        self.scrollPequeno.setMinimumSize(570, 100)
+        self.layoutPrincipal.addWidget(self.scrollPequeno, 0, 0, 3, 4)
+
+        # Recreando los widgets de video
+        self.poblarLista(self.resultados, self.cantidad)
+
+
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")

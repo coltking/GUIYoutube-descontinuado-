@@ -25,7 +25,7 @@ class VideoWidget(QtGui.QWidget):
         self.sizePolicy.setHorizontalStretch(0)
         self.sizePolicy.setVerticalStretch(0)
         self.setSizePolicy(self.sizePolicy)
-        self.setMaximumSize(QtCore.QSize(640, 180))
+        #self.setMaximumSize(QtCore.QSize(530, 130))
         #self.setMinimumSize(QtCore.QSize(450, 150))
 
         self.gridLayout = QtGui.QGridLayout(self)
@@ -36,6 +36,11 @@ class VideoWidget(QtGui.QWidget):
         self.playBtn.setObjectName(("playBtn"))
         self.playBtn.pressed.connect(self.play)
         self.gridLayout.addWidget(self.playBtn, 2, 2, 1, 1)
+
+        # Botón de Música
+        self.musicaBtn = QtGui.QPushButton("Música", self)
+        self.musicaBtn.clicked.connect(self.reproducirMusica)
+        self.gridLayout.addWidget(self.musicaBtn, 2, 3, 1, 1)
 
         #Label con título de video
         self.titleLabel = QtGui.QLabel(self.title, self)
@@ -64,7 +69,7 @@ class VideoWidget(QtGui.QWidget):
         #Label de duración
         self.durLabel = QtGui.QLabel("Time: " + str(self.duración), self)
         self.durLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.gridLayout.addWidget(self.durLabel, 2, 3, 1, 2)
+        self.gridLayout.addWidget(self.durLabel, 2, 4, 1, 1)
 
     # Funciones de clase.
     def play(self):
@@ -111,6 +116,9 @@ class VideoWidget(QtGui.QWidget):
         if "MP4" in self.popup.clickedButton().text():
             self.formato = "MP4"
         return self.formato
+
+    def reproducirMusica(self):
+        self.parent().parent().parent().parent().parent().crearReproductorDeMusica(self.descarga[0], self.orden, self.title)
 
 
 """
