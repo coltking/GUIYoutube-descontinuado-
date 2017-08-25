@@ -93,7 +93,8 @@ class VideoWidget(QtGui.QWidget):
 
         # Label de Duración de video
         self.duracionLabel = QtGui.QLabel(self)
-        self.duracionLabel.setStyleSheet("background-color:black")
+        self.duracionLabel.setStyleSheet("color: white; background-color: black")
+        #self.duracionLabel.setStyleSheet("color: white")
         self.duracionLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
         self.duracionLabel.setText(str(self.duración))
 
