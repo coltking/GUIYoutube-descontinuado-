@@ -14,11 +14,11 @@ class reproductorDeMusica(QtGui.QWidget):
         self.titulo = titulo
 
         # Iconos
-        self.playIcono = QtGui.QIcon("play.svg")
-        self.pausaIcono = QtGui.QIcon("pause.svg")
-        self.stopIcono = QtGui.QIcon("stop.svg")
-        self.adelanteIcono = QtGui.QIcon("forward.svg")
-        self.atrasIcono = QtGui.QIcon("backwards.svg")
+        self.playIcono = QtGui.QIcon(".iconos/play.svg")
+        self.pausaIcono = QtGui.QIcon(".iconos/pause.svg")
+        self.stopIcono = QtGui.QIcon(".iconos/stop.svg")
+        self.adelanteIcono = QtGui.QIcon(".iconos/forward.svg")
+        self.atrasIcono = QtGui.QIcon(".iconos/backwards.svg")
 
         self.instancia = vlc.Instance()
         self.reproductor = self.instancia.media_player_new()
@@ -110,6 +110,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.titulo = titulo
         self.link = descarga
 
+        self.tituloWidget.setText(self.titulo)
         self.medioNuevo = self.buscarEnlace()
         self.streamNuevo = self.instancia.media_new("https" + self.medioNuevo[-1][:-1])
 

@@ -27,20 +27,31 @@ class VideoWidget(QtGui.QWidget):
         self.setSizePolicy(self.sizePolicy)
         #self.setMaximumSize(QtCore.QSize(530, 130))
         #self.setMinimumSize(QtCore.QSize(450, 150))
+        self.playIcono = QtGui.QIcon(".iconos/play.svg")
+        self.descargarIcono = QtGui.QIcon(".iconos/download.svg")
+        self.agregarAListaIcono = QtGui.QIcon(".iconos/playlistAdd.svg")
 
         self.gridLayout = QtGui.QGridLayout(self)
         self.gridLayout.setObjectName(("gridLayout"))
 
         #Botón Play
-        self.playBtn = QtGui.QPushButton("Play", self)
+        self.playBtn = QtGui.QPushButton("Video", self)
+        self.playBtn.setToolTip("Reproducir el video en un reproductor externo")
+        self.playBtn.setIcon(self.playIcono)
+        self.playBtn.setMaximumHeight(25)
         self.playBtn.setObjectName(("playBtn"))
         self.playBtn.pressed.connect(self.play)
-        self.gridLayout.addWidget(self.playBtn, 2, 2, 1, 1)
+
+        self.gridLayout.addWidget(self.playBtn, 2, 3, 1, 1)
 
         # Botón de Música
         self.musicaBtn = QtGui.QPushButton("Música", self)
+        self.musicaBtn.setToolTip("Reproducir como sólo audio con el reproductor interno\nRequiere VLC Media Player")
+        self.musicaBtn.setIcon(self.playIcono)
+        self.musicaBtn.setMaximumHeight(25)
         self.musicaBtn.clicked.connect(self.reproducirMusica)
-        self.gridLayout.addWidget(self.musicaBtn, 2, 3, 1, 1)
+
+        self.gridLayout.addWidget(self.musicaBtn, 2, 4, 1, 1)
 
         #Label con título de video
         self.titleLabel = QtGui.QLabel(self.title, self)
@@ -49,13 +60,26 @@ class VideoWidget(QtGui.QWidget):
         self.titleLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.titleLabel.setWordWrap(True)
         self.titleLabel.setObjectName(("titleLabel"))
-        self.gridLayout.addWidget(self.titleLabel, 0, 2, 2, 4)
+
+        self.gridLayout.addWidget(self.titleLabel, 0, 3, 2, 6)
 
         #Botón Descarga
         self.downloadBtn = QtGui.QPushButton("Descargar", self)
+        self.downloadBtn.setToolTip("Descargar el video en el formato escogido")
+        self.downloadBtn.setIcon(self.descargarIcono)
+        self.downloadBtn.setMaximumHeight(25)
         self.downloadBtn.setObjectName(("downloadBtn"))
         self.downloadBtn.pressed.connect(self.descargar)
-        self.gridLayout.addWidget(self.downloadBtn, 2, 5, 1, 1)
+
+        self.gridLayout.addWidget(self.downloadBtn, 2, 7, 1, 1)
+
+        # Botón de lista de reproducción
+        self.listaBoton = QtGui.QPushButton(self)
+        self.listaBoton.setToolTip("Agregar este video a la lista de reproducción actual")
+        self.listaBoton.setIcon(self.agregarAListaIcono)
+        self.listaBoton.setMaximumSize(25, 25)
+
+        self.gridLayout.addWidget(self.listaBoton, 2, 8, 1, 1)
 
         #Label del thumbnail
         self.thumbLabel = QtGui.QLabel(self)
@@ -64,12 +88,21 @@ class VideoWidget(QtGui.QWidget):
         self.thumbLabel.setScaledContents(True)
         self.thumbLabel.setMaximumWidth(220)
         self.thumbLabel.setMaximumHeight(120)
-        self.gridLayout.addWidget(self.thumbLabel, 0, 0, 3, 2)
+
+        self.gridLayout.addWidget(self.thumbLabel, 0, 0, 3, 3)
+
+        # Label de Duración de video
+        self.duracionLabel = QtGui.QLabel(self)
+        self.duracionLabel.setStyleSheet("background-color:black")
+        self.duracionLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+        self.duracionLabel.setText(str(self.duración))
+
+        self.gridLayout.addWidget(self.duracionLabel, 2, 0, 1, 1)
 
         #Label de duración
-        self.durLabel = QtGui.QLabel("Time: " + str(self.duración), self)
-        self.durLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.gridLayout.addWidget(self.durLabel, 2, 4, 1, 1)
+        #self.durLabel = QtGui.QLabel("Time: " + str(self.duración), self)
+        #self.durLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+        #self.gridLayout.addWidget(self.durLabel, 2, 4, 1, 1)
 
     # Funciones de clase.
     def play(self):
