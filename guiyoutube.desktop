@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=0.0.1
+Type=Application
+Terminal=false
+Icon=guiyoutube
+Name=GUIYoutube
+Exec=guiyoutube
+Comment=Aplicacion grafica para Youtube
+Name=GUIYoutube
+Comment=Aplicacion grafica para Youtube
+GenericName=Aplicacion grafica para Youtube
+Categories=GTK;Network;
