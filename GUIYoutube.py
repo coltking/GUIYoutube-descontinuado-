@@ -20,7 +20,7 @@ class Ventana(QtGui.QMainWindow):
 
     def __init__(self):
         super(Ventana, self).__init__()
-        self.ver = "0.1 Alpha"
+        self.ver = "0.2 Alpha"
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setWindowIcon(QtGui.QIcon("Youtube.ico"))
         self.setGeometry(100, 100, 1000, 500)
@@ -447,6 +447,8 @@ class Ventana(QtGui.QMainWindow):
         # Recreando widgets de video
         self.poblarLista(self.resultados, self.cantidad)
 
+    def agregarALista(self, link, titulo, numero):
+        self.reproductor.agregarALista(link, titulo, thumbNumero)
 
 
     #def printerFunc(self):
