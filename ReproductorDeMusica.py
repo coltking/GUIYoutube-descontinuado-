@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 # -*- encoding=utf-8 -*-
 
-#import os
-import tempfile
+import os
+import shutil
 from PyQt4 import QtGui, QtCore
 import subprocess
 import vlc
@@ -43,49 +43,63 @@ class reproductorDeMusica(QtGui.QWidget):
         self.construirWidget()
 
     def construirWidget(self):
-        # Reproductor
-        #self.contenedor = QtGui.QFrame(self)
-        self.contenedorLayout = QtGui.QGridLayout(self)
-        self.contenedorLayout.setContentsMargins(0, 0, 0, 0)
-        self.contenedorLayout.setHorizontalSpacing(20)
-        #self.contenedor.setLayout(self.contenedorLayout)
+        self.sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding,
+                            QtGui.QSizePolicy.Expanding)
+        self.setSizePolicy(self.sizePolicy)
 
-        # Thumbnail
-        thumb = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
-        self.miniaturaFrame = QtGui.QLabel( self)
-        self.miniaturaFrame.setPixmap(thumb)
-        self.miniaturaFrame.setScaledContents(True)
-        self.miniaturaFrame.setMinimumWidth(200)
-        self.miniaturaFrame.setMaximumWidth(220)
-        self.miniaturaFrame.setMaximumHeight(120)
-        self.contenedorLayout.addWidget(self.miniaturaFrame, 0, 0, 3, 3)
+        # Reproductor
+        self.contenedor = QtGui.QWidget(self)
+        wallpaper = ".thumbs/" + str(self.thumbNumero) + ".jpg"
+        self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
+        self.setAutoFillBackground(True)
+        self.contenedorLayout = QtGui.QGridLayout(self)
+        #self.contenedorLayout.setContentsMargins(0, 0, 0, 0)
+        #self.contenedorLayout.setHorizontalSpacing(20)
+        self.setLayout(self.contenedorLayout)
+
+        self.contenedorLayout.addWidget(self.contenedor, 0, 0, 3, 12)
+
+        ## Thumbnail
+        #thumb = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
+        #self.miniaturaFrame = QtGui.QLabel( self)
+        #self.miniaturaFrame.setPixmap(thumb)
+        #self.miniaturaFrame.setScaledContents(True)
+        #self.miniaturaFrame.setMinimumWidth(200)
+        #self.miniaturaFrame.setMaximumWidth(220)
+        #self.miniaturaFrame.setMaximumHeight(120)
+        #self.contenedorLayout.addWidget(self.miniaturaFrame, 0, 0, 3, 11)
 
         # Título
         self.tituloWidget = QtGui.QLabel(self.titulo, self)
+        self.tituloWidget.setStyleSheet("background-image: url(bg.png)")
         self.tituloWidget.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.contenedorLayout.addWidget(self.tituloWidget, 0, 3, 1, 8)
+        self.contenedorLayout.addWidget(self.tituloWidget, 0, 0, 1, 11)
 
         # Botones
         self.atrasBoton = QtGui.QPushButton(self)
-        self.atrasBoton.setMaximumSize(25, 25)
+        self.atrasBoton.setStyleSheet("background-image: url(bg.png)")
+        self.atrasBoton.setMaximumSize(35, 35)
         self.atrasBoton.setIcon(self.atrasIcono)
         self.atrasBoton.clicked.connect(self.atras)
         self.contenedorLayout.addWidget(self.atrasBoton, 2, 3, 1, 1)
 
         self.playBoton = QtGui.QPushButton(self)
-        self.playBoton.setMaximumSize(25, 25)
+        self.playBoton.setStyleSheet("background-image: url(bg.png)")
+        self.playBoton.setMaximumSize(35, 35)
         self.playBoton.setIcon(self.pausaIcono)
         self.playBoton.clicked.connect(self.play)
         self.contenedorLayout.addWidget(self.playBoton, 2, 4, 1, 1)
 
         self.stopBoton = QtGui.QPushButton(self)
-        self.stopBoton.setMaximumSize(25, 25)
+        self.stopBoton.setStyleSheet("background-image: url(bg.png)")
+        self.stopBoton.setMaximumSize(35, 35)
         self.stopBoton.setIcon(self.stopIcono)
         self.stopBoton.clicked.connect(self.stop)
         self.contenedorLayout.addWidget(self.stopBoton, 2, 5, 1, 1)
 
         self.adelanteBoton = QtGui.QPushButton(self)
-        self.adelanteBoton.setMaximumSize(25, 25)
+        self.adelanteBoton.setStyleSheet("background-image: url(bg.png)")
+        self.adelanteBoton.setMaximumSize(35, 35)
         self.adelanteBoton.setIcon(self.adelanteIcono)
         self.adelanteBoton.clicked.connect(self.adelante)
         self.contenedorLayout.addWidget(self.adelanteBoton, 2, 6, 1, 1)
@@ -98,12 +112,14 @@ class reproductorDeMusica(QtGui.QWidget):
         self.contenedorLayout.setColumnMinimumWidth(7, 300)
 
         self.aleatorioBoton = QtGui.QPushButton(self)
-        self.aleatorioBoton.setMaximumSize(25, 25)
+        self.aleatorioBoton.setStyleSheet("background-image: url(bg.png)")
+        self.aleatorioBoton.setMaximumSize(35, 35)
         self.aleatorioBoton.setIcon(self.aleatorioIcono)
         self.contenedorLayout.addWidget(self.aleatorioBoton, 2, 8, 1, 1)
 
         self.repetirBoton = QtGui.QPushButton(self)
-        self.repetirBoton.setMaximumSize(25, 25)
+        self.repetirBoton.setStyleSheet("background-image: url(bg.png)")
+        self.repetirBoton.setMaximumSize(35, 35)
         self.repetirBoton.setIcon(self.repetirIcono)
         self.contenedorLayout.addWidget(self.repetirBoton, 2, 9, 1, 1)
 
@@ -115,6 +131,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.contenedorLayout.setColumnMinimumWidth(7, 50)
 
         self.volumenBoton = QtGui.QPushButton(self)
+        self.volumenBoton.setStyleSheet("background-image: url(bg.png)")
         self.volumenBoton.setMaximumSize(25, 25)
         self.volumenBoton.setFlat(True)
         self.volumenBoton.setIcon(self.volumenIcono)
@@ -122,6 +139,7 @@ class reproductorDeMusica(QtGui.QWidget):
 
         # Slider para control de volumen
         self.volumenSlider = QtGui.QSlider(QtCore.Qt.Vertical, self)
+        self.volumenSlider.setStyleSheet("background-image: url(bg.png)")
         self.volumenSlider.setMinimum(0)
         self.volumenSlider.setMaximum(100)
         self.volumenSlider.setValue(50)
@@ -131,8 +149,9 @@ class reproductorDeMusica(QtGui.QWidget):
 
         # Slider para tiempo de reproducción (seek)
         self.lineaDeTiempoSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
+        self.lineaDeTiempoSlider.setStyleSheet("background-image: url(bg.png)")
 
-        self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 1, 3, 1, 9)
+        self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 1, 0, 1, 12)
 
     def construirMedio(self):
         self.medio = self.buscarEnlace()
@@ -140,8 +159,8 @@ class reproductorDeMusica(QtGui.QWidget):
         self.stream.parse()
         self.listaDeReproduccion.add_media(self.stream)
 
-        self.titulos.append(self.stream.get_meta(0))
-        self.miniaturas.append(self.thumbNumero)
+        self.titulos.append(self.titulo)
+        #self.miniaturas.append(self.thumbNumero)
 
         self.reproductorDeLista.set_media_list(self.listaDeReproduccion)
 
@@ -232,7 +251,11 @@ class reproductorDeMusica(QtGui.QWidget):
         self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def generarMiniaturaDeLista(self, thumbNumero):
-        pass
+        if not os.path.exists("thumbsTemporales"):
+            os.mkdir("thumbsTemporales")
+
+        shutil.copy(".thumbs/" + str(thumbNumero) + ".jpg",
+        "thumbsTemporales/0004.jpg")
 
     def volumen(self, volumen):
         self.reproductor.audio_set_volume(volumen)
