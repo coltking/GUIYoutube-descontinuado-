@@ -20,13 +20,12 @@ class VideoWidget(QtGui.QWidget):
         self.preferido = preferido
         #
         self.setObjectName(("widget"))
-        #self.resize(593, 176)
         self.sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         self.sizePolicy.setHorizontalStretch(0)
         self.sizePolicy.setVerticalStretch(0)
         self.setSizePolicy(self.sizePolicy)
-        #self.setMaximumSize(QtCore.QSize(530, 130))
-        #self.setMinimumSize(QtCore.QSize(450, 150))
+
+        # Íconos
         self.playIcono = QtGui.QIcon(".iconos/play.svg")
         self.descargarIcono = QtGui.QIcon(".iconos/download.svg")
         self.agregarAListaIcono = QtGui.QIcon(".iconos/playlistAdd.svg")
@@ -78,6 +77,7 @@ class VideoWidget(QtGui.QWidget):
         self.listaBoton.setToolTip("Agregar este video a la lista de reproducción actual")
         self.listaBoton.setIcon(self.agregarAListaIcono)
         self.listaBoton.setMaximumSize(25, 25)
+        self.listaBoton.clicked.connect(self.agregarALista)
 
         self.gridLayout.addWidget(self.listaBoton, 2, 8, 1, 1)
 
@@ -94,16 +94,10 @@ class VideoWidget(QtGui.QWidget):
         # Label de Duración de video
         self.duracionLabel = QtGui.QLabel(self)
         self.duracionLabel.setStyleSheet("color: white; background-color: black")
-        #self.duracionLabel.setStyleSheet("color: white")
         self.duracionLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
         self.duracionLabel.setText(str(self.duración))
 
         self.gridLayout.addWidget(self.duracionLabel, 2, 0, 1, 1)
-
-        #Label de duración
-        #self.durLabel = QtGui.QLabel("Time: " + str(self.duración), self)
-        #self.durLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        #self.gridLayout.addWidget(self.durLabel, 2, 4, 1, 1)
 
     # Funciones de clase.
     def play(self):
@@ -153,6 +147,9 @@ class VideoWidget(QtGui.QWidget):
 
     def reproducirMusica(self):
         self.parent().parent().parent().parent().parent().crearReproductorDeMusica(self.descarga[0], self.orden, self.title)
+
+    def agregarALista(self):
+        self.parent().parent().parent().parent().parent().agregarALista(self.descarga[0], self.title, self.orden)
 
 
 """
