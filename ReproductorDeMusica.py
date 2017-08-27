@@ -15,7 +15,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.thumbNumero = thumbNumero
         self.titulo = titulo
 
-        # Lista de títulos
+        # Lista de titulos
         self.titulos = []
         self.indiceDeTitulos = 0
 
@@ -69,7 +69,7 @@ class reproductorDeMusica(QtGui.QWidget):
         #self.miniaturaFrame.setMaximumHeight(120)
         #self.contenedorLayout.addWidget(self.miniaturaFrame, 0, 0, 3, 11)
 
-        # Título
+        # Titulo
         self.tituloWidget = QtGui.QLabel(self.titulo, self)
         self.tituloWidget.setStyleSheet("background-image: url(bg.png)")
         self.tituloWidget.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
@@ -104,7 +104,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.adelanteBoton.clicked.connect(self.adelante)
         self.contenedorLayout.addWidget(self.adelanteBoton, 2, 6, 1, 1)
 
-        # Botón espaciador
+        # Boton espaciador
         self.espaciadorBoton = QtGui.QPushButton(self)
         self.espaciadorBoton.setFlat(True)
         self.contenedorLayout.addWidget(self.espaciadorBoton, 2, 7, 1, 1)
@@ -123,7 +123,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.repetirBoton.setIcon(self.repetirIcono)
         self.contenedorLayout.addWidget(self.repetirBoton, 2, 9, 1, 1)
 
-        # Botón espaciador
+        # Boton espaciador
         self.espaciador2Boton = QtGui.QPushButton(self)
         self.espaciador2Boton.setFlat(True)
         self.contenedorLayout.addWidget(self.espaciador2Boton, 2, 10, 1, 1)
@@ -147,7 +147,7 @@ class reproductorDeMusica(QtGui.QWidget):
 
         self.contenedorLayout.addWidget(self.volumenSlider, 0, 12, 3, 1)
 
-        # Slider para tiempo de reproducción (seek)
+        # Slider para tiempo de reproduccion (seek)
         self.lineaDeTiempoSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         self.lineaDeTiempoSlider.setStyleSheet("background-image: url(bg.png)")
 

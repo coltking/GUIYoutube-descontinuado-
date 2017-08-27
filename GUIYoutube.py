@@ -48,47 +48,47 @@ class Ventana(QtGui.QMainWindow):
         self.menuBarra = self.menuBar()
 
         # Acciones.
-        self.acciónLimpiar = QtGui.QAction("Limpiar cache de miniaturas", self)
-        self.acciónLimpiar.setShortcut("Ctrl+Shift+L")
-        self.acciónLimpiar.setStatusTip("Limpiar el directorio de thumbnails.")
-        self.acciónLimpiar.triggered.connect(self.limpiarCache)
+        self.accionLimpiar = QtGui.QAction("Limpiar cache de miniaturas", self)
+        self.accionLimpiar.setShortcut("Ctrl+Shift+L")
+        self.accionLimpiar.setStatusTip("Limpiar el directorio de thumbnails.")
+        self.accionLimpiar.triggered.connect(self.limpiarCache)
 
-        self.acciónSalir = QtGui.QAction("Salir de la aplicación", self)
-        self.acciónSalir.setShortcut("Ctrl+Shift+E")
-        self.acciónSalir.setStatusTip("Salir de la aplicación.")
-        self.acciónSalir.triggered.connect(self.salir)
+        self.accionSalir = QtGui.QAction("Salir de la aplicacion", self)
+        self.accionSalir.setShortcut("Ctrl+Shift+E")
+        self.accionSalir.setStatusTip("Salir de la aplicacion.")
+        self.accionSalir.triggered.connect(self.salir)
 
-        self.acciónDescargarPorLink = QtGui.QAction("Descargar con link", self)
-        self.acciónDescargarPorLink.setShortcut("Ctrl+Shift+D")
-        self.acciónDescargarPorLink.triggered.connect(self.descargaporlinkparametros)
+        self.accionDescargarPorLink = QtGui.QAction("Descargar con link", self)
+        self.accionDescargarPorLink.setShortcut("Ctrl+Shift+D")
+        self.accionDescargarPorLink.triggered.connect(self.descargaporlinkparametros)
 
-        self.acciónAbout = QtGui.QAction("Acerca del proyecto GUIYoutube", self)
-        self.acciónAbout.setStatusTip("Información sobre este proyecto.")
+        self.accionAbout = QtGui.QAction("Acerca del proyecto GUIYoutube", self)
+        self.accionAbout.setStatusTip("Informacion sobre este proyecto.")
 
-        self.acciónElegirCalidadDeVideo = QtGui.QAction("Elegir calidad de video", self)
-        self.acciónElegirCalidadDeVideo.setStatusTip("Seleccionar la calidad por defecto de los videos buscados (No implementado aún).")
+        self.accionElegirCalidadDeVideo = QtGui.QAction("Elegir calidad de video", self)
+        self.accionElegirCalidadDeVideo.setStatusTip("Seleccionar la calidad por defecto de los videos buscados (No implementado aún).")
 
-        self.acciónElegirCalidadDeAudio = QtGui.QAction("Elegir calidad de sonido", self)
-        self.acciónElegirCalidadDeAudio.setStatusTip("Seleccionar la calidad por defecto del sonido en los videos buscados (No implementado aún).")
+        self.accionElegirCalidadDeAudio = QtGui.QAction("Elegir calidad de sonido", self)
+        self.accionElegirCalidadDeAudio.setStatusTip("Seleccionar la calidad por defecto del sonido en los videos buscados (No implementado aún).")
 
         # Menú "Archivo".
         self.menuArchivo = self.menuBarra.addMenu("Archivo")
-        self.menuArchivo.addAction(self.acciónLimpiar)
+        self.menuArchivo.addAction(self.accionLimpiar)
         self.menuArchivo.addSeparator()
-        self.menuArchivo.addAction(self.acciónSalir)
+        self.menuArchivo.addAction(self.accionSalir)
 
         # Menú "Preferencias".
         self.menuPreferencias = self.menuBarra.addMenu("Preferencias")
-        self.menuPreferencias.addAction(self.acciónElegirCalidadDeVideo)
-        self.menuPreferencias.addAction(self.acciónElegirCalidadDeAudio)
+        self.menuPreferencias.addAction(self.accionElegirCalidadDeVideo)
+        self.menuPreferencias.addAction(self.accionElegirCalidadDeAudio)
 
         # Menú "Herramientas".
         self.menuHerramientas = self.menuBarra.addMenu("Herramientas")
-        self.menuHerramientas.addAction(self.acciónDescargarPorLink)
+        self.menuHerramientas.addAction(self.accionDescargarPorLink)
 
         # Menú "About".
         self.menuAbout = self.menuBarra.addMenu("About")
-        self.menuAbout.addAction(self.acciónAbout)
+        self.menuAbout.addAction(self.accionAbout)
 
         # Widget y Layout para el centro de la ventana.
         self.widgetPrincipal = QtGui.QWidget(self)
@@ -106,19 +106,19 @@ class Ventana(QtGui.QMainWindow):
 
         # LineEdit para el término de búsqueda.Ventana
 
-        self.términoDeBúsqueda = QtGui.QLineEdit(self)
-        self.términoDeBúsqueda.setPlaceholderText("Ingrese el término de búsqueda.")
-        self.términoDeBúsqueda.returnPressed.connect(self.consulta)
+        self.terminoDeBusqueda = QtGui.QLineEdit(self)
+        self.terminoDeBusqueda.setPlaceholderText("Ingrese el término de búsqueda.")
+        self.terminoDeBusqueda.returnPressed.connect(self.consulta)
 
-        self.layoutPrincipal.addWidget(self.términoDeBúsqueda, 0, 4, 1, 2)
+        self.layoutPrincipal.addWidget(self.terminoDeBusqueda, 0, 4, 1, 2)
 
-        # Botón Buscar para búsqueda.
+        # Boton Buscar para búsqueda.
 
         self.buscarBtn = QtGui.QPushButton("Buscar en YT", self)
         self.layoutPrincipal.addWidget(self.buscarBtn, 1, 5, 1, 1)
         self.buscarBtn.pressed.connect(self.consulta)
 
-        # Botón para descargar por link
+        # Boton para descargar por link
 
         self.descargarLinkBtn = QtGui.QPushButton("Descargar con link", self)
         self.layoutPrincipal.addWidget(self.descargarLinkBtn, 1, 4, 1, 1)
@@ -131,16 +131,16 @@ class Ventana(QtGui.QMainWindow):
 
         self.layoutPrincipal.addWidget(self.listaDeOpciones, 3, 4, 2, 2)
 
-        self.opción1 = QtGui.QRadioButton("1 video.", self)
-        self.opción2 = QtGui.QRadioButton("5 videos.", self)
-        self.opción2.setChecked(True)
-        self.opción3 = QtGui.QRadioButton("10 videos.", self)
-        self.opción4 = QtGui.QRadioButton("Primera página.", self)
+        self.opcion1 = QtGui.QRadioButton("1 video.", self)
+        self.opcion2 = QtGui.QRadioButton("5 videos.", self)
+        self.opcion2.setChecked(True)
+        self.opcion3 = QtGui.QRadioButton("10 videos.", self)
+        self.opcion4 = QtGui.QRadioButton("Primera página.", self)
 
-        self.listaLayout.addWidget(self.opción1, 0, 0, 1, 1)
-        self.listaLayout.addWidget(self.opción2, 0, 1, 1, 1)
-        self.listaLayout.addWidget(self.opción3, 1, 0, 1, 1)
-        self.listaLayout.addWidget(self.opción4, 1, 1, 1, 1)
+        self.listaLayout.addWidget(self.opcion1, 0, 0, 1, 1)
+        self.listaLayout.addWidget(self.opcion2, 0, 1, 1, 1)
+        self.listaLayout.addWidget(self.opcion3, 1, 0, 1, 1)
+        self.listaLayout.addWidget(self.opcion4, 1, 1, 1, 1)
 
         self.listaDeOpciones.setLayout(self.listaLayout)
 
@@ -186,7 +186,7 @@ class Ventana(QtGui.QMainWindow):
         self.calidad1080.setCheckable(True)
         self.calidad1080.clicked.connect(self.revisar1080)
 
-        # Botón de descarga
+        # Boton de descarga
 
         self.botonDescarga = QtGui.QPushButton("Descargar", self)
         self.botonDescarga.clicked.connect(self.seleccionDeCantidad)
@@ -244,33 +244,33 @@ class Ventana(QtGui.QMainWindow):
 
     def consulta(self):
 
-        self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
+        self.aviso.setText("Buscando videos en YouTube. \n Solo tomará unos sengundos.")
         QtGui.QApplication.processEvents()
-        # Es necesario duplicar las órdenes para que se actualice el label de aviso
+        # Es necesario duplicar las ordenes para que se actualice el label de aviso
         # de búsqueda cuando se usa enter, sino no responde.
-        self.aviso.setText("Buscando videos en YouTube. \n Sólo tomará unos sengundos.")
+        self.aviso.setText("Buscando videos en YouTube. \n Solo tomará unos sengundos.")
         QtGui.QApplication.processEvents()
 
-        if self.opción1.isChecked() == True:
+        if self.opcion1.isChecked() == True:
             self.cantidad = 1
-        if self.opción2.isChecked() == True:
+        if self.opcion2.isChecked() == True:
             self.cantidad = 5
-        if self.opción3.isChecked() == True:
+        if self.opcion3.isChecked() == True:
             self.cantidad = 10
-        if self.opción4.isChecked() == True:
+        if self.opcion4.isChecked() == True:
             self.cantidad = 20
 
-        término = self.términoDeBúsqueda.text()
-        objetoBúsqueda = BYT(término, self.cantidad)
-        self.resultados = objetoBúsqueda.obtenerDatos()
+        termino = self.terminoDeBusqueda.text()
+        objetoBusqueda = BYT(termino, self.cantidad)
+        self.resultados = objetoBusqueda.obtenerDatos()
 
         self.poblarLista(self.resultados, self.cantidad)
 
     def descargaporlinkparametros(self):
-        if "//www.youtube.com/watch" in self.términoDeBúsqueda.text():
+        if "//www.youtube.com/watch" in self.terminoDeBusqueda.text():
             self.listaDeOpciones.hide()
             self.widgetCalidad.show()
-            self.link = self.términoDeBúsqueda.text()
+            self.link = self.terminoDeBusqueda.text()
         else:
             self.popup = QtGui.QMessageBox.information(self, "Informacion", """No ha ingresado una url valida""",QtGui.QMessageBox.Ok)
 
@@ -316,8 +316,8 @@ class Ventana(QtGui.QMainWindow):
         tempWidget.setLayout(tempLayout)
 
         for i in range(0, cantidad):
-            videoBlock = VideoWidget(resultados["Título" + str(i)], i,
-                                    resultados["Duración" + str(i)],
+            videoBlock = VideoWidget(resultados["Titulo" + str(i)], i,
+                                    resultados["Duracion" + str(i)],
                                     resultados["PlayVLC" + str(i)],
                                     resultados["PlayMPV" + str(i)],
                                     resultados["Descarga" + str(i)],
@@ -336,11 +336,11 @@ class Ventana(QtGui.QMainWindow):
             os.remove(i)
 
     def salir(self):
-        elección = QtGui.QMessageBox.question(self,
-                                    "Saliendo de la aplicación.",
+        eleccion = QtGui.QMessageBox.question(self,
+                                    "Saliendo de la aplicacion.",
                                     "¿Está seguro que quiere salir?",
                                     QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
-        if elección == QtGui.QMessageBox.Yes:
+        if eleccion == QtGui.QMessageBox.Yes:
             sys.exit()
         else:
             pass
@@ -416,7 +416,7 @@ class Ventana(QtGui.QMainWindow):
             self.statusBar().showMessage("")
 
         elif self.reproductorActivo:
-            self.statusBar().showMessage("Cambiando de medio de reproducción", 2000)
+            self.statusBar().showMessage("Cambiando de medio de reproduccion", 2000)
             QtGui.QApplication.processEvents()
             hayMedioNuevo = self.reproductor.cambiarMedio(descarga, thumbNumero, titulo)
 

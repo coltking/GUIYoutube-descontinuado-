@@ -12,18 +12,18 @@ from youtube_dl import YoutubeDL as YT
 
 class BYT():
 
-    def __init__(self, términoDeBúsqueda, númeroDeResultados):
+    def __init__(self, terminoDeBusqueda, numeroDeResultados):
 
-        self.númeroDeParámetros = 3
-        self.término = términoDeBúsqueda
-        self.resultados = númeroDeResultados
+        self.numeroDeParametros = 3
+        self.termino = terminoDeBusqueda
+        self.resultados = numeroDeResultados
 
-        self.títulos = []
+        self.titulos = []
         self.IDs = []
         self.duraciones = []
 
-        # Pequeño loop para armar el término de búsqueda.
-        self.termSplit = self.término.split()
+        # Pequeño loop para armar el termino de busqueda.
+        self.termSplit = self.termino.split()
         self.termFull = ""
         for i in range(0, len(self.termSplit)):
             self.termFull= self.termFull + self.termSplit[i] + "+"
@@ -36,7 +36,7 @@ class BYT():
         self.soup = bs.BeautifulSoup(self.datos, "html.parser")
 
         for i in self.soup.body.find_all("a", class_= "yt-uix-tile-link yt-ui-ellipsis yt-ui-ellipsis-2 yt-uix-sessionlink spf-link "):
-            self.títulos.append(i.get("title"))
+            self.titulos.append(i.get("title"))
             self.IDs.append(i.get("href")[9:20])
 
         for i in self.soup.body.find_all("span", class_= "video-time"):
@@ -47,19 +47,19 @@ class BYT():
         #este for llena el diccionario
         self.lista = {}
         for i in range(len(self.duraciones)):
-            tmp1 = "Título"+str(i)
+            tmp1 = "Titulo"+str(i)
             tmp2 = "ID"+str(i)
-            tmp3 = "Duración"+str(i)
+            tmp3 = "Duracion"+str(i)
             tmpPlayMPV = "PlayMPV"+str(i)
             tmpPlayVLC = "PlayVLC"+str(i)
             tmpDownload = "Descarga"+str(i)
-            self.lista[tmp1] = self.títulos[i]
+            self.lista[tmp1] = self.titulos[i]
             self.lista[tmp2] = self.IDs[i]
             self.lista[tmp3] = self.duraciones[i]
             self.lista[tmpPlayMPV] = ["https://www.youtube.com/watch?v=" + self.IDs[i]]
             self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v=" + self.IDs[i]]
             self.lista[tmpDownload] = ["https://www.youtube.com/watch?v=" + str(self.IDs[i])]
-        # Este return debería devolver el diccionario.
+        # Este return deberia devolver el diccionario.
         return self.lista
 
 
@@ -68,15 +68,15 @@ class BYT():
             U.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg", ".thumbs/" + str(i) + ".jpg")
 
             #print("http://img.youtube.com/vi/"+self.IDs[i][9:]+"/mqdefault.jpg")
-        # Esto de aquí ya está demás. Lo dejo por si sirve de guía en el futuro.
-        #for i in range(0, len(self.títulos)):
-            #print("Video", str(i), ":", self.títulos[i], ". Duration:",
+        # Esto de aqui ya esta demas. Lo dejo por si sirve de guia en el futuro.
+        #for i in range(0, len(self.titulos)):
+            #print("Video", str(i), ":", self.titulos[i], ". Duration:",
             #self.duraciones[i], "Mns. ID:", '"',
             #self.IDs[i], '".')
 
 
-            #Lo que sigue a continuación sirve únicamente para testeo de este script.
-        #Para la versión final ha de eliminarse/comentarse para que no interfiera.
+            #Lo que sigue a continuacion sirve unicamente para testeo de este script.
+        #Para la version final ha de eliminarse/comentarse para que no interfiera.
 
 
 
@@ -87,9 +87,9 @@ if __name__ == "__main__":
 
 
 
-# Nuevo objeto BYT() - Toma dos parámetros, términoDeBúsqueda y númeroDeResultados.
-#nuevaBúsqueda = BYT("Godot Engine", 2)
-# Llamada al método obtenerDatos del objeto BYT()
-#resultado = nuevaBúsqueda.obtenerDatos()
+# Nuevo objeto BYT() - Toma dos parametros, terminoDeBusqueda y numeroDeResultados.
+#nuevaBusqueda = BYT("Godot Engine", 2)
+# Llamada al metodo obtenerDatos del objeto BYT()
+#resultado = nuevaBusqueda.obtenerDatos()
 # Print
 #print(resultado)

@@ -9,11 +9,11 @@ from youtube_dl import YoutubeDL as YT
 
 class VideoWidget(QtGui.QWidget):
 
-    def __init__(self, title, orden, duración, vlc, mpv, descarga, preferido):
+    def __init__(self, title, orden, duracion, vlc, mpv, descarga, preferido):
         QtGui.QWidget.__init__(self)
         self.orden = orden
         self.title = title
-        self.duración = duración
+        self.duracion = duracion
         self.vlc = vlc
         self.mpv = mpv
         self.descarga = descarga
@@ -33,7 +33,7 @@ class VideoWidget(QtGui.QWidget):
         self.gridLayout = QtGui.QGridLayout(self)
         self.gridLayout.setObjectName(("gridLayout"))
 
-        #Botón Play
+        #Boton Play
         self.playBtn = QtGui.QPushButton("Video", self)
         self.playBtn.setToolTip("Reproducir el video en un reproductor externo")
         self.playBtn.setIcon(self.playIcono)
@@ -43,16 +43,16 @@ class VideoWidget(QtGui.QWidget):
 
         self.gridLayout.addWidget(self.playBtn, 2, 3, 1, 1)
 
-        # Botón de Música
-        self.musicaBtn = QtGui.QPushButton("Música", self)
-        self.musicaBtn.setToolTip("Reproducir como sólo audio con el reproductor interno\nRequiere VLC Media Player")
+        # Boton de Musica
+        self.musicaBtn = QtGui.QPushButton("Musica", self)
+        self.musicaBtn.setToolTip("Reproducir como solo audio con el reproductor interno\nRequiere VLC Media Player")
         self.musicaBtn.setIcon(self.playIcono)
         self.musicaBtn.setMaximumHeight(25)
         self.musicaBtn.clicked.connect(self.reproducirMusica)
 
         self.gridLayout.addWidget(self.musicaBtn, 2, 4, 1, 1)
 
-        #Label con título de video
+        #Label con titulo de video
         self.titleLabel = QtGui.QLabel(self.title, self)
         self.titleLabel.setFrameShape(QtGui.QFrame.StyledPanel)
         self.titleLabel.setFrameShadow(QtGui.QFrame.Sunken)
@@ -62,7 +62,7 @@ class VideoWidget(QtGui.QWidget):
 
         self.gridLayout.addWidget(self.titleLabel, 0, 3, 2, 6)
 
-        #Botón Descarga
+        #Boton Descarga
         self.downloadBtn = QtGui.QPushButton("Descargar", self)
         self.downloadBtn.setToolTip("Descargar el video en el formato escogido")
         self.downloadBtn.setIcon(self.descargarIcono)
@@ -72,9 +72,9 @@ class VideoWidget(QtGui.QWidget):
 
         self.gridLayout.addWidget(self.downloadBtn, 2, 7, 1, 1)
 
-        # Botón de lista de reproducción
+        # Boton de lista de reproduccion
         self.listaBoton = QtGui.QPushButton(self)
-        self.listaBoton.setToolTip("Agregar este video a la lista de reproducción actual")
+        self.listaBoton.setToolTip("Agregar este video a la lista de reproduccion actual")
         self.listaBoton.setIcon(self.agregarAListaIcono)
         self.listaBoton.setMaximumSize(25, 25)
         self.listaBoton.clicked.connect(self.agregarALista)
@@ -91,11 +91,11 @@ class VideoWidget(QtGui.QWidget):
 
         self.gridLayout.addWidget(self.thumbLabel, 0, 0, 3, 3)
 
-        # Label de Duración de video
+        # Label de Duracion de video
         self.duracionLabel = QtGui.QLabel(self)
         self.duracionLabel.setStyleSheet("color: white; background-color: black")
         self.duracionLabel.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.duracionLabel.setText(str(self.duración))
+        self.duracionLabel.setText(str(self.duracion))
 
         self.gridLayout.addWidget(self.duracionLabel, 2, 0, 1, 1)
 
