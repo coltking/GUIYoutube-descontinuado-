@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # -*- encoding=utf-8 -*-
 
-import os
+#import os
+import tempfile
 from PyQt4 import QtGui, QtCore
 import subprocess
 import vlc
@@ -16,6 +17,7 @@ class reproductorDeMusica(QtGui.QWidget):
 
         # Lista de títulos
         self.titulos = []
+        self.indiceDeTitulos = 0
 
         # Lista de thumbnails
         self.miniaturas = []
@@ -122,7 +124,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.volumenSlider = QtGui.QSlider(QtCore.Qt.Vertical, self)
         self.volumenSlider.setMinimum(0)
         self.volumenSlider.setMaximum(100)
-        self.volumenSlider.setValue(self.reproductor.audio_get_volume())
+        self.volumenSlider.setValue(50)
         self.volumenSlider.valueChanged.connect(self.volumen)
 
         self.contenedorLayout.addWidget(self.volumenSlider, 0, 12, 3, 1)
@@ -135,15 +137,19 @@ class reproductorDeMusica(QtGui.QWidget):
     def construirMedio(self):
         self.medio = self.buscarEnlace()
         self.stream = self.instancia.media_new("https" + self.medio[-1][:-1])
+        self.stream.parse()
         self.listaDeReproduccion.add_media(self.stream)
 
-        self.titulos.append(self.titulo)
+        self.titulos.append(self.stream.get_meta(0))
         self.miniaturas.append(self.thumbNumero)
 
         self.reproductorDeLista.set_media_list(self.listaDeReproduccion)
-        self.reproductor.audio_set_volume(100)
 
         self.play()
+        self.reproductor.audio_set_volume(50)
+        self.volumenSlider.setValue(self.reproductor.audio_get_volume())
+
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def buscarEnlace(self):
         with subprocess.Popen(['python3 youtube_dl/__main__.py --get-url ' + self.link + '--get-url'],
@@ -169,10 +175,15 @@ class reproductorDeMusica(QtGui.QWidget):
 
     def adelante(self):
         self.reproductorDeLista.next()
-        pass
+        self.tituloWidget.setText(self.titulos[self.indiceDeTitulos + 1])
+        self.indiceDeTitulos += 1
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def atras(self):
         self.reproductorDeLista.previous()
+        self.tituloWidget.setText(self.titulos[self.indiceDeTitulos - 1])
+        self.indiceDeTitulos -= 1
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def cambiarMedio(self, descarga, thumbNumero, titulo):
         self.thumbNumero = thumbNumero
@@ -183,14 +194,27 @@ class reproductorDeMusica(QtGui.QWidget):
         self.medioNuevo = self.buscarEnlace()
         self.streamNuevo = self.instancia.media_new("https" + self.medioNuevo[-1][:-1])
 
-
-
         thumbNuevo = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
 
+        #self.reproductor.set_media(self.streamNuevo)
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
-        self.reproductor.set_media(self.streamNuevo)
+        # Liberando elementos de la lista
+        self.listaDeReproduccion.unlock()
+        self.listaDeReproduccion.release()
+        self.listaDeReproduccion = self.instancia.media_list_new()
+        self.reproductorDeLista.set_media_list(self.listaDeReproduccion)
+
+        self.listaDeReproduccion.add_media(self.streamNuevo)
         self.miniaturaFrame.setPixmap(thumbNuevo)
-        self.play()
+
+        self.titulos = []
+        self.titulos.append(titulo)
+
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
+
+        self.reproductorDeLista.stop()
+        self.reproductorDeLista.play()
 
         return True
 
@@ -198,13 +222,14 @@ class reproductorDeMusica(QtGui.QWidget):
         self.link = link
 
         itemDeLista = self.buscarEnlace()
-        print(itemDeLista)
         nuevoMedio = self.instancia.media_new("https" + itemDeLista[-1][:-1])
         self.listaDeReproduccion.add_media(nuevoMedio)
 
         self.titulos.append(titulo)
         miniatura = self.generarMiniaturaDeLista(thumbNumero)
         self.miniaturas.append(miniatura)
+
+        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def generarMiniaturaDeLista(self, thumbNumero):
         pass

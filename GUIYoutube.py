@@ -213,7 +213,7 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
         # Dummy
-        self.dummy = QtGui.QWidget(self)
+        self.dummy = QtGui.QLabel(self)
         #self.dummy.setStyleSheet("background-color:white")
         self.layoutPrincipal.addWidget(self.dummy, 5, 4, 1, 2)
 
@@ -447,9 +447,11 @@ class Ventana(QtGui.QMainWindow):
         # Recreando widgets de video
         self.poblarLista(self.resultados, self.cantidad)
 
-    def agregarALista(self, link, titulo, numero):
+    def agregarALista(self, link, titulo, thumbNumero):
         self.reproductor.agregarALista(link, titulo, thumbNumero)
 
+    def actualizarLista(self, texto):
+        self.dummy.setText(str(texto))
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")
