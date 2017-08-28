@@ -23,14 +23,14 @@ class reproductorDeMusica(QtGui.QWidget):
         self.miniaturas = []
 
         # Iconos
-        self.playIcono = QtGui.QIcon(".iconos/play.svg")
-        self.pausaIcono = QtGui.QIcon(".iconos/pause.svg")
-        self.stopIcono = QtGui.QIcon(".iconos/stop.svg")
-        self.adelanteIcono = QtGui.QIcon(".iconos/forward.svg")
-        self.atrasIcono = QtGui.QIcon(".iconos/backwards.svg")
-        self.aleatorioIcono = QtGui.QIcon(".iconos/shuffle.svg")
-        self.repetirIcono = QtGui.QIcon(".iconos/repeat.svg")
-        self.volumenIcono = QtGui.QIcon(".iconos/volume.svg")
+        self.playIcono = QtGui.QIcon(".iconos/play.png")
+        self.pausaIcono = QtGui.QIcon(".iconos/pause.png")
+        self.stopIcono = QtGui.QIcon(".iconos/stop.png")
+        self.adelanteIcono = QtGui.QIcon(".iconos/forward.png")
+        self.atrasIcono = QtGui.QIcon(".iconos/backwards.png")
+        self.aleatorioIcono = QtGui.QIcon(".iconos/shuffle.png")
+        self.repetirIcono = QtGui.QIcon(".iconos/repeat.png")
+        self.volumenIcono = QtGui.QIcon(".iconos/volume.png")
 
         self.instancia = vlc.Instance()
         self.reproductor = self.instancia.media_player_new()
@@ -38,6 +38,8 @@ class reproductorDeMusica(QtGui.QWidget):
         self.reproductorDeLista.set_media_player(self.reproductor)
 
         self.listaDeReproduccion = self.instancia.media_list_new()
+
+        self.setStyleSheet("border: 1px solid white")
 
         # Widget del reproductor
         self.construirWidget()
@@ -53,105 +55,96 @@ class reproductorDeMusica(QtGui.QWidget):
         self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
         self.setAutoFillBackground(True)
         self.contenedorLayout = QtGui.QGridLayout(self)
-        #self.contenedorLayout.setContentsMargins(0, 0, 0, 0)
-        #self.contenedorLayout.setHorizontalSpacing(20)
         self.setLayout(self.contenedorLayout)
 
-        self.contenedorLayout.addWidget(self.contenedor, 0, 0, 3, 12)
-
-        ## Thumbnail
-        #thumb = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
-        #self.miniaturaFrame = QtGui.QLabel( self)
-        #self.miniaturaFrame.setPixmap(thumb)
-        #self.miniaturaFrame.setScaledContents(True)
-        #self.miniaturaFrame.setMinimumWidth(200)
-        #self.miniaturaFrame.setMaximumWidth(220)
-        #self.miniaturaFrame.setMaximumHeight(120)
-        #self.contenedorLayout.addWidget(self.miniaturaFrame, 0, 0, 3, 11)
+        self.contenedorLayout.addWidget(self.contenedor, 0, 0, 4, 12)
+        self.contenedorLayout.setHorizontalSpacing(0)
+        self.contenedorLayout.setVerticalSpacing(0)
 
         # Titulo
         self.tituloWidget = QtGui.QLabel(self.titulo, self)
-        self.tituloWidget.setStyleSheet("background-image: url(bg.png)")
+        self.tituloWidget.setStyleSheet("""background-image: url(bg.png);
+                                        font: 'Liberation Sans';
+                                        font-size: 20px""")
         self.tituloWidget.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
-        self.contenedorLayout.addWidget(self.tituloWidget, 0, 0, 1, 11)
+        self.contenedorLayout.addWidget(self.tituloWidget, 0, 0, 2, 11)
 
         # Botones
         self.atrasBoton = QtGui.QPushButton(self)
+        self.atrasBoton.setFlat(True)
         self.atrasBoton.setStyleSheet("background-image: url(bg.png)")
         self.atrasBoton.setMaximumSize(35, 35)
         self.atrasBoton.setIcon(self.atrasIcono)
         self.atrasBoton.clicked.connect(self.atras)
-        self.contenedorLayout.addWidget(self.atrasBoton, 2, 3, 1, 1)
+        self.contenedorLayout.addWidget(self.atrasBoton, 3, 0, 1, 1)
 
         self.playBoton = QtGui.QPushButton(self)
+        self.playBoton.setFlat(True)
         self.playBoton.setStyleSheet("background-image: url(bg.png)")
         self.playBoton.setMaximumSize(35, 35)
         self.playBoton.setIcon(self.pausaIcono)
         self.playBoton.clicked.connect(self.play)
-        self.contenedorLayout.addWidget(self.playBoton, 2, 4, 1, 1)
+        self.contenedorLayout.addWidget(self.playBoton, 3, 1, 1, 1)
 
         self.stopBoton = QtGui.QPushButton(self)
+        self.stopBoton.setFlat(True)
         self.stopBoton.setStyleSheet("background-image: url(bg.png)")
         self.stopBoton.setMaximumSize(35, 35)
         self.stopBoton.setIcon(self.stopIcono)
         self.stopBoton.clicked.connect(self.stop)
-        self.contenedorLayout.addWidget(self.stopBoton, 2, 5, 1, 1)
+        self.contenedorLayout.addWidget(self.stopBoton, 3, 2, 1, 1)
 
         self.adelanteBoton = QtGui.QPushButton(self)
+        self.adelanteBoton.setFlat(True)
         self.adelanteBoton.setStyleSheet("background-image: url(bg.png)")
         self.adelanteBoton.setMaximumSize(35, 35)
         self.adelanteBoton.setIcon(self.adelanteIcono)
         self.adelanteBoton.clicked.connect(self.adelante)
-        self.contenedorLayout.addWidget(self.adelanteBoton, 2, 6, 1, 1)
-
-        # Boton espaciador
-        self.espaciadorBoton = QtGui.QPushButton(self)
-        self.espaciadorBoton.setFlat(True)
-        self.contenedorLayout.addWidget(self.espaciadorBoton, 2, 7, 1, 1)
-
-        self.contenedorLayout.setColumnMinimumWidth(7, 300)
+        self.contenedorLayout.addWidget(self.adelanteBoton, 3, 3, 1, 1)
 
         self.aleatorioBoton = QtGui.QPushButton(self)
+        self.aleatorioBoton.setFlat(True)
         self.aleatorioBoton.setStyleSheet("background-image: url(bg.png)")
         self.aleatorioBoton.setMaximumSize(35, 35)
         self.aleatorioBoton.setIcon(self.aleatorioIcono)
-        self.contenedorLayout.addWidget(self.aleatorioBoton, 2, 8, 1, 1)
+        self.aleatorioBoton.clicked.connect(self.modoAleatorio)
+
+        self.contenedorLayout.addWidget(self.aleatorioBoton, 3, 7, 1, 1)
 
         self.repetirBoton = QtGui.QPushButton(self)
+        self.repetirBoton.setFlat(True)
         self.repetirBoton.setStyleSheet("background-image: url(bg.png)")
         self.repetirBoton.setMaximumSize(35, 35)
         self.repetirBoton.setIcon(self.repetirIcono)
-        self.contenedorLayout.addWidget(self.repetirBoton, 2, 9, 1, 1)
-
-        # Boton espaciador
-        self.espaciador2Boton = QtGui.QPushButton(self)
-        self.espaciador2Boton.setFlat(True)
-        self.contenedorLayout.addWidget(self.espaciador2Boton, 2, 10, 1, 1)
-
-        self.contenedorLayout.setColumnMinimumWidth(7, 50)
+        self.repetirBoton.clicked.connect(self.modoRepeticion)
+        self.contenedorLayout.addWidget(self.repetirBoton, 3, 8, 1, 1)
 
         self.volumenBoton = QtGui.QPushButton(self)
         self.volumenBoton.setStyleSheet("background-image: url(bg.png)")
         self.volumenBoton.setMaximumSize(25, 25)
+        self.volumenBoton.setIconSize(QtCore.QSize(15, 15))
         self.volumenBoton.setFlat(True)
         self.volumenBoton.setIcon(self.volumenIcono)
-        self.contenedorLayout.addWidget(self.volumenBoton, 2, 11, 1, 1)
+        self.contenedorLayout.addWidget(self.volumenBoton, 3, 10, 1, 1)
 
         # Slider para control de volumen
         self.volumenSlider = QtGui.QSlider(QtCore.Qt.Vertical, self)
         self.volumenSlider.setStyleSheet("background-image: url(bg.png)")
         self.volumenSlider.setMinimum(0)
         self.volumenSlider.setMaximum(100)
-        self.volumenSlider.setValue(50)
         self.volumenSlider.valueChanged.connect(self.volumen)
 
-        self.contenedorLayout.addWidget(self.volumenSlider, 0, 12, 3, 1)
+        self.contenedorLayout.addWidget(self.volumenSlider, 0, 11, 4, 1)
 
         # Slider para tiempo de reproduccion (seek)
         self.lineaDeTiempoSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         self.lineaDeTiempoSlider.setStyleSheet("background-image: url(bg.png)")
+        self.lineaDeTiempoSlider.valueChanged.connect(self.cambiarTiempo)
 
-        self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 1, 0, 1, 12)
+        self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 2, 0, 1, 11)
+
+        # Eliminar el espacio entre el slider de volumen y los demás widgets
+        self.contenedorLayout.setColumnMinimumWidth(11, 0)
 
     def construirMedio(self):
         self.medio = self.buscarEnlace()
@@ -213,8 +206,6 @@ class reproductorDeMusica(QtGui.QWidget):
         self.medioNuevo = self.buscarEnlace()
         self.streamNuevo = self.instancia.media_new("https" + self.medioNuevo[-1][:-1])
 
-        thumbNuevo = QtGui.QPixmap(".thumbs/" + str(self.thumbNumero) + ".jpg")
-
         #self.reproductor.set_media(self.streamNuevo)
         self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
@@ -225,17 +216,17 @@ class reproductorDeMusica(QtGui.QWidget):
         self.reproductorDeLista.set_media_list(self.listaDeReproduccion)
 
         self.listaDeReproduccion.add_media(self.streamNuevo)
-        self.miniaturaFrame.setPixmap(thumbNuevo)
 
         self.titulos = []
         self.titulos.append(titulo)
 
         self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
+        wallpaper = ".thumbs/" + str(self.thumbNumero) + ".jpg"
+        self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
+
         self.reproductorDeLista.stop()
         self.reproductorDeLista.play()
-
-        return True
 
     def agregarALista(self, link, titulo, thumbNumero):
         self.link = link
@@ -259,3 +250,12 @@ class reproductorDeMusica(QtGui.QWidget):
 
     def volumen(self, volumen):
         self.reproductor.audio_set_volume(volumen)
+
+    def modoAleatorio(self):
+        pass
+
+    def modoRepeticion(self):
+        self.reproductorDeLista.set_playback_mode("loop")
+
+    def cambiarTiempo(self, tiempo):
+        self.reproductor.set_position(tiempo / 100.0)

@@ -26,9 +26,9 @@ class VideoWidget(QtGui.QWidget):
         self.setSizePolicy(self.sizePolicy)
 
         # Íconos
-        self.playIcono = QtGui.QIcon(".iconos/play.svg")
-        self.descargarIcono = QtGui.QIcon(".iconos/download.svg")
-        self.agregarAListaIcono = QtGui.QIcon(".iconos/playlistAdd.svg")
+        self.playIcono = QtGui.QIcon(".iconos/play.png")
+        self.descargarIcono = QtGui.QIcon(".iconos/download.png")
+        self.agregarAListaIcono = QtGui.QIcon(".iconos/playlistAdd.png")
 
         self.gridLayout = QtGui.QGridLayout(self)
         self.gridLayout.setObjectName(("gridLayout"))

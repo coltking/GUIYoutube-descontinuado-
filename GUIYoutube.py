@@ -11,6 +11,7 @@ from glob import glob
 
 from VideoWidget import *
 from BYT import *
+from BLista import *
 from youtube_dl import YoutubeDL as YT
 from ReproductorDeMusica import reproductorDeMusica as RM
 
@@ -24,6 +25,7 @@ class Ventana(QtGui.QMainWindow):
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setWindowIcon(QtGui.QIcon("Youtube.ico"))
         self.setGeometry(100, 100, 1000, 500)
+        self.setMaximumSize(1200, 670)
         self.cantidad = 5
         self.reproductorPreferido = "VLC"
         self.statusBar()
@@ -104,6 +106,17 @@ class Ventana(QtGui.QMainWindow):
         self.scroll.setMinimumWidth(600)
         self.layoutPrincipal.addWidget(self.scroll, 0, 0, 6, 4)
 
+        # Scrolled are para la lista de reproducción
+        self.listaScroll = QtGui.QScrollArea(self)
+        self.listaScroll.setWidgetResizable(True)
+
+        self.layoutPrincipal.addWidget(self.listaScroll, 5, 4, 1, 2)
+        self.listaScroll.hide()
+
+        # TableView para la lista de reproducción
+        self.listaTabla = QtGui.QTableWidget(5, 1, self)
+
+        self.listaScroll.setWidget(self.listaTabla)
         # LineEdit para el término de búsqueda.Ventana
 
         self.terminoDeBusqueda = QtGui.QLineEdit(self)
@@ -213,9 +226,9 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
 
         # Dummy
-        self.dummy = QtGui.QLabel(self)
+        #self.dummy = QtGui.QLabel(self)
         #self.dummy.setStyleSheet("background-color:white")
-        self.layoutPrincipal.addWidget(self.dummy, 5, 4, 1, 2)
+        #self.layoutPrincipal.addWidget(self.dummy, 5, 4, 1, 2)
 
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox(self)
@@ -260,9 +273,35 @@ class Ventana(QtGui.QMainWindow):
         if self.opcion4.isChecked() == True:
             self.cantidad = 20
 
-        termino = self.terminoDeBusqueda.text()
-        objetoBusqueda = BYT(termino, self.cantidad)
-        self.resultados = objetoBusqueda.obtenerDatos()
+        # Búsqueda de videos en listas de reproducción.
+        salida = ""
+        if "//www.youtube.com/playlist" in self.terminoDeBusqueda.text():
+            data = subprocess.Popen(["python3", "youtube_dl/__main__.py",
+                                    "--get-title",
+                                    "--get-id",
+                                    "--get-duration",
+                                    str(self.terminoDeBusqueda.text())],
+                                    universal_newlines=True,
+                                    stdout=subprocess.PIPE)
+
+            while data.poll() == None:
+                try:
+                    salida = data.communicate()
+                except:
+                    pass
+
+            stdOutDatos = salida[0]
+            datos = str(stdOutDatos).split("\n")
+
+            objetoBusqueda = BusquedaDeLista(datos, 3)
+            self.resultados = objetoBusqueda.obtenerDatos()
+            self.cantidad = int(len(self.resultados) / 6)
+
+        # Búsqueda por térmio de búsqueda
+        else:
+            termino = self.terminoDeBusqueda.text()
+            objetoBusqueda = BYT(termino, self.cantidad)
+            self.resultados = objetoBusqueda.obtenerDatos()
 
         self.poblarLista(self.resultados, self.cantidad)
 
@@ -310,7 +349,6 @@ class Ventana(QtGui.QMainWindow):
         return self.formato
 
     def poblarLista(self, resultados, cantidad):
-
         tempWidget = QtGui.QWidget(self)
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
@@ -410,6 +448,7 @@ class Ventana(QtGui.QMainWindow):
             self.reconstruirScrolledArea()
 
             self.layoutPrincipal.addWidget(self.reproductor, 5, 0, 1, 4)
+            self.listaScroll.show()
 
             QtGui.QApplication.processEvents()
             self.reproductor.construirMedio()
@@ -451,7 +490,7 @@ class Ventana(QtGui.QMainWindow):
         self.reproductor.agregarALista(link, titulo, thumbNumero)
 
     def actualizarLista(self, texto):
-        self.dummy.setText(str(texto))
+        pass
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")
