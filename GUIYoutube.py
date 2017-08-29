@@ -113,10 +113,10 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.listaScroll, 5, 4, 1, 2)
         self.listaScroll.hide()
 
-        # TableView para la lista de reproducción
-        self.listaTabla = QtGui.QTableWidget(5, 1, self)
+        # ListWidget para la lista de reproducción
+        self.listaList = QtGui.QListWidget(self)
 
-        self.listaScroll.setWidget(self.listaTabla)
+        self.listaScroll.setWidget(self.listaList)
         # LineEdit para el término de búsqueda.Ventana
 
         self.terminoDeBusqueda = QtGui.QLineEdit(self)
@@ -489,8 +489,13 @@ class Ventana(QtGui.QMainWindow):
     def agregarALista(self, link, titulo, thumbNumero):
         self.reproductor.agregarALista(link, titulo, thumbNumero)
 
-    def actualizarLista(self, texto):
-        pass
+    def actualizarLista(self, lista):
+        self.listaList.clear()
+        for i in range(0, len(lista)):
+            itemDeLista = QtGui.QListWidgetItem()
+            itemDeLista.setText(lista[i]["titulo"])
+
+            self.listaList.insertItem(i, itemDeLista)
 
     #def printerFunc(self):
         #print("Yay!!...You've hit the sweet spot!!!!!!")

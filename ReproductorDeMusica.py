@@ -3,9 +3,12 @@
 
 import os
 import shutil
+import string
+import random
 from PyQt4 import QtGui, QtCore
 import subprocess
 import vlc
+
 
 class reproductorDeMusica(QtGui.QWidget):
 
@@ -16,11 +19,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.titulo = titulo
 
         # Lista de titulos
-        self.titulos = []
-        self.indiceDeTitulos = 0
-
-        # Lista de thumbnails
-        self.miniaturas = []
+        self.listaDeReproduccionTemporal = []
 
         # Iconos
         self.playIcono = QtGui.QIcon(".iconos/play.png")
@@ -32,6 +31,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.repetirIcono = QtGui.QIcon(".iconos/repeat.png")
         self.volumenIcono = QtGui.QIcon(".iconos/volume.png")
 
+        # LibVLC
         self.instancia = vlc.Instance()
         self.reproductor = self.instancia.media_player_new()
         self.reproductorDeLista = self.instancia.media_list_player_new()
@@ -40,6 +40,13 @@ class reproductorDeMusica(QtGui.QWidget):
         self.listaDeReproduccion = self.instancia.media_list_new()
 
         self.setStyleSheet("border: 1px solid white")
+
+        self.administradorDeEventos = self.reproductor.event_manager()
+        self.administradorDeEventos.event_attach(vlc.EventType.MediaPlayerMediaChanged, self.eventoMedioCambiado)
+
+        # Temporizador para refrescar la interfaz
+        self.temporizador = QtCore.QTimer(self)
+        self.temporizador.timeout.connect(self.actualizarLineaDeTiempo)
 
         # Widget del reproductor
         self.construirWidget()
@@ -139,7 +146,8 @@ class reproductorDeMusica(QtGui.QWidget):
         # Slider para tiempo de reproduccion (seek)
         self.lineaDeTiempoSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         self.lineaDeTiempoSlider.setStyleSheet("background-image: url(bg.png)")
-        self.lineaDeTiempoSlider.valueChanged.connect(self.cambiarTiempo)
+        self.lineaDeTiempoSlider.setMaximum(100)
+        self.lineaDeTiempoSlider.sliderMoved.connect(self.cambiarTiempo)
 
         self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 2, 0, 1, 11)
 
@@ -152,16 +160,33 @@ class reproductorDeMusica(QtGui.QWidget):
         self.stream.parse()
         self.listaDeReproduccion.add_media(self.stream)
 
-        self.titulos.append(self.titulo)
-        #self.miniaturas.append(self.thumbNumero)
+        self.listaDeRreproduccionTemporal = []
 
         self.reproductorDeLista.set_media_list(self.listaDeReproduccion)
 
         self.play()
+        self.temporizador.start(1000)
         self.reproductor.audio_set_volume(50)
         self.volumenSlider.setValue(self.reproductor.audio_get_volume())
 
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
+        #self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
+
+        # Para listas de reproducción
+        nombreDeThumb = str(random.choice(string.ascii_uppercase) + random.choice(string.digits) + random.choice(string.ascii_lowercase))
+        shutil.copy(".thumbs/" + str(self.thumbNumero) + ".jpg", ".thumbsTemporales/" + nombreDeThumb + ".jpg")
+
+        # Diccionario
+        if len(self.listaDeReproduccionTemporal) > 0:
+            for i in len(self.listaDeReproduccionTemporal):
+                os.remove(self.listaDeReproduccionTemporal[i]["thumbTemporal"])
+
+        self.listaDeReproduccionTemporal = []
+        diccionario = {}
+        diccionario["titulo"] = self.titulo
+        diccionario["thumbTemporal"] = ".thumbsTemporales/" + nombreDeThumb + ".jpg"
+
+        self.listaDeReproduccionTemporal.append(diccionario)
+        self.actualizarLista()
 
     def buscarEnlace(self):
         with subprocess.Popen(['python3 youtube_dl/__main__.py --get-url ' + self.link + '--get-url'],
@@ -176,6 +201,9 @@ class reproductorDeMusica(QtGui.QWidget):
         if self.reproductorDeLista.is_playing():
             self.reproductorDeLista.pause()
             self.playBoton.setIcon(self.playIcono)
+
+            self.temporizador.start(1000)
+
         elif not self.reproductorDeLista.is_playing():
             self.reproductorDeLista.play()
             self.playBoton.setIcon(self.pausaIcono)
@@ -187,15 +215,9 @@ class reproductorDeMusica(QtGui.QWidget):
 
     def adelante(self):
         self.reproductorDeLista.next()
-        self.tituloWidget.setText(self.titulos[self.indiceDeTitulos + 1])
-        self.indiceDeTitulos += 1
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def atras(self):
         self.reproductorDeLista.previous()
-        self.tituloWidget.setText(self.titulos[self.indiceDeTitulos - 1])
-        self.indiceDeTitulos -= 1
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
     def cambiarMedio(self, descarga, thumbNumero, titulo):
         self.thumbNumero = thumbNumero
@@ -206,9 +228,6 @@ class reproductorDeMusica(QtGui.QWidget):
         self.medioNuevo = self.buscarEnlace()
         self.streamNuevo = self.instancia.media_new("https" + self.medioNuevo[-1][:-1])
 
-        #self.reproductor.set_media(self.streamNuevo)
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
-
         # Liberando elementos de la lista
         self.listaDeReproduccion.unlock()
         self.listaDeReproduccion.release()
@@ -217,16 +236,28 @@ class reproductorDeMusica(QtGui.QWidget):
 
         self.listaDeReproduccion.add_media(self.streamNuevo)
 
-        self.titulos = []
-        self.titulos.append(titulo)
-
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
-
         wallpaper = ".thumbs/" + str(self.thumbNumero) + ".jpg"
         self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
 
         self.reproductorDeLista.stop()
         self.reproductorDeLista.play()
+        self.actualizarLista()
+
+        # Para listas de reproducción
+        nombreDeThumb = str(random.choice(string.ascii_uppercase) + random.choice(string.digits) + random.choice(string.ascii_lowercase))
+        shutil.copy(".thumbs/" + str(self.thumbNumero) + ".jpg", ".thumbsTemporales/" + nombreDeThumb + ".jpg")
+
+        # Diccionario
+        if len(self.listaDeReproduccionTemporal) > 0:
+            for i in range(0, len(self.listaDeReproduccionTemporal)):
+                os.remove(self.listaDeReproduccionTemporal[i]["thumbTemporal"])
+
+        self.listaDeReproduccionTemporal = []
+        diccionario = {}
+        diccionario["titulo"] = self.titulo
+        diccionario["thumbTemporal"] = ".thumbsTemporales/" + nombreDeThumb + ".jpg"
+
+        self.listaDeReproduccionTemporal.append(diccionario)
 
     def agregarALista(self, link, titulo, thumbNumero):
         self.link = link
@@ -235,27 +266,50 @@ class reproductorDeMusica(QtGui.QWidget):
         nuevoMedio = self.instancia.media_new("https" + itemDeLista[-1][:-1])
         self.listaDeReproduccion.add_media(nuevoMedio)
 
-        self.titulos.append(titulo)
-        miniatura = self.generarMiniaturaDeLista(thumbNumero)
-        self.miniaturas.append(miniatura)
+        #self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
-        self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
+        # Para listas de reproducción
+        nombreDeThumb = str(random.choice(string.ascii_uppercase) + random.choice(string.digits) + random.choice(string.ascii_lowercase))
+        shutil.copy(".thumbs/" + str(thumbNumero) + ".jpg", ".thumbsTemporales/" + nombreDeThumb + ".jpg")
 
-    def generarMiniaturaDeLista(self, thumbNumero):
-        if not os.path.exists("thumbsTemporales"):
-            os.mkdir("thumbsTemporales")
+        # Diccionario
+        diccionario = {}
+        diccionario["titulo"] = titulo
+        diccionario["thumbTemporal"] = ".thumbsTemporales/" + nombreDeThumb + ".jpg"
 
-        shutil.copy(".thumbs/" + str(thumbNumero) + ".jpg",
-        "thumbsTemporales/0004.jpg")
+        self.listaDeReproduccionTemporal.append(diccionario)
+        self.actualizarLista()
 
     def volumen(self, volumen):
         self.reproductor.audio_set_volume(volumen)
 
     def modoAleatorio(self):
-        pass
+        self.actualizarLista()
 
     def modoRepeticion(self):
         self.reproductorDeLista.set_playback_mode("loop")
 
     def cambiarTiempo(self, tiempo):
         self.reproductor.set_position(tiempo / 100.0)
+
+    def eventoMedioCambiado(self, evento):
+        try:
+            medioActual = self.reproductor.get_media()
+            indiceDeMedioActual = self.listaDeReproduccion.index_of_item(medioActual)
+
+            self.tituloWidget.setText(self.listaDeReproduccionTemporal[indiceDeMedioActual]["titulo"])
+            self.setStyleSheet("background-image: url(" + self.listaDeReproduccionTemporal[indiceDeMedioActual]["thumbTemporal"] + "); background-position: left")
+        except:
+            pass
+
+    def actualizarLineaDeTiempo(self):
+        if not self.reproductor.is_playing():
+            self.temporizador.stop()
+            #self.stop()
+        self.lineaDeTiempoSlider.setValue(self.reproductor.get_time() / 1000)
+
+    def actualizarLista(self):
+        try:
+            self.parent().parent().actualizarLista(self.listaDeReproduccionTemporal)
+        except:
+            print("Falló la actualización de la lista de Reproducción!")
