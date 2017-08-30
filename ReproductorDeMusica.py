@@ -338,4 +338,6 @@ class reproductorDeMusica(QtGui.QWidget):
         wallpaper = self.listaDeReproduccionTemporal[indiceDeMedioActual]["thumbTemporal"]
         self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
         QtGui.QApplication.processEvents()
-        print("Wallpaper")
+
+    def eliminarPista(self, indice):
+        del self.listaDeReproduccionTemporal[indice]

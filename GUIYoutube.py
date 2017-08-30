@@ -104,7 +104,7 @@ class Ventana(QtGui.QMainWindow):
         self.scroll = QtGui.QScrollArea(self)
         self.scroll.setWidgetResizable(True)
         self.scroll.setMinimumWidth(600)
-        self.layoutPrincipal.addWidget(self.scroll, 0, 0, 6, 4)
+        self.layoutPrincipal.addWidget(self.scroll, 0, 0, 7, 4)
 
         # Scrolled are para la lista de reproducción
         self.listaScroll = QtGui.QScrollArea(self)
@@ -431,12 +431,24 @@ class Ventana(QtGui.QMainWindow):
             self.reproductorActivo = True
             self.reconstruirScrolledArea()
 
-            self.layoutPrincipal.addWidget(self.reproductor, 5, 0, 1, 4)
+            # Reproductor
+            self.layoutPrincipal.addWidget(self.reproductor, 5, 0, 2, 4)
             self.listaScroll.show()
 
             QtGui.QApplication.processEvents()
             self.reproductor.construirMedio()
             self.statusBar().showMessage("")
+
+            # Botones para lista de reproducción
+            self.botonBorrar = QtGui.QPushButton("Eliminar", self)
+            self.botonBorrar.clicked.connect(self.eliminarPista)
+            self.botonGuardar = QtGui.QPushButton("Guardar Lista", self)
+
+            self.botoneraLayout = QtGui.QHBoxLayout(self)
+            self.botoneraLayout.addWidget(self.botonBorrar)
+            self.botoneraLayout.addWidget(self.botonGuardar)
+
+            self.layoutPrincipal.addLayout(self.botoneraLayout, 6, 4, 1, 1)
 
         elif self.reproductorActivo:
             self.statusBar().showMessage("Cambiando de medio de reproduccion", 2000)
@@ -495,8 +507,12 @@ class Ventana(QtGui.QMainWindow):
         indice = self.listaList.row(item)
         self.reproductor.reproducirCancionEn(indice)
 
-    def eliminarPista(self, item):
-        print("Pista eliminada", item)
+    def eliminarPista(self):
+        pista = self.listaList.currentRow()
+        self.listaList.takeItem(pista)
+        print(pista)
+
+        self.reproductor.eliminarPista(pista)
 
 def run():
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_X11InitThreads)
