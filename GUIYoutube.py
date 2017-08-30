@@ -242,6 +242,8 @@ class Ventana(QtGui.QMainWindow):
             self.reproductorPreferido = "MPV"
 
         self.show()
+        self.limpiarThumbsTemporales()
+
     def formato(self):
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox()
@@ -333,20 +335,6 @@ class Ventana(QtGui.QMainWindow):
             os.chdir(exdir)
             #self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
             subprocess.Popen(["notify-send", "-t","4000", "Descarga finalizada (revise su carpeta de descargas)"])
-
-
-    def formato(self):
-        # Pop-up para elegir reproductor.
-        self.popup = QtGui.QMessageBox()
-        self.popup.setText("Seleccione un formato para su descarga.")
-        self.mp3 = self.popup.addButton("MP3(audio)", QtGui.QMessageBox.ActionRole)
-        self.mp4 = self.popup.addButton("MP4(video)", QtGui.QMessageBox.ActionRole)
-        self.popup.exec()
-        if "MP3" in self.popup.clickedButton().text():
-            self.formato = "MP3"
-        if "MP4" in self.popup.clickedButton().text():
-            self.formato = "MP4"
-        return self.formato
 
     def poblarLista(self, resultados, cantidad):
         tempWidget = QtGui.QWidget(self)
@@ -475,7 +463,6 @@ class Ventana(QtGui.QMainWindow):
 
     def destruirReproductorDeMusica(self):
         self.reproductorActivo = False
-        print("Destruyendo reproductor")
         # Se elimina el scrolled area pequeno
         self.scrollPequeno.hide()
         self.reproductor.hide()
@@ -497,9 +484,16 @@ class Ventana(QtGui.QMainWindow):
 
             self.listaList.insertItem(i, itemDeLista)
 
-    #def printerFunc(self):
-        #print("Yay!!...You've hit the sweet spot!!!!!!")
+    def actualizarIndiceDeLista(self, indice):
+        item = self.listaList.item(indice)
+        self.listaList.setItemSelected(item, True)
 
+    def limpiarThumbsTemporales(self):
+        dir = os.path.join(os.getcwd(), ".thumbsTemporales")
+        archivos = os.listdir(dir)
+        for archivo in archivos:
+            if archivo.endswith(".jpg"):
+                os.remove(os.path.join(dir, archivo))
 
 
 def run():

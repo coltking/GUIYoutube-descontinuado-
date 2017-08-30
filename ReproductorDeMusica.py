@@ -18,6 +18,8 @@ class reproductorDeMusica(QtGui.QWidget):
         self.thumbNumero = thumbNumero
         self.titulo = titulo
 
+        self.indiceDePista = 0
+
         # Lista de titulos
         self.listaDeReproduccionTemporal = []
 
@@ -146,7 +148,7 @@ class reproductorDeMusica(QtGui.QWidget):
         # Slider para tiempo de reproduccion (seek)
         self.lineaDeTiempoSlider = QtGui.QSlider(QtCore.Qt.Horizontal, self)
         self.lineaDeTiempoSlider.setStyleSheet("background-image: url(bg.png)")
-        self.lineaDeTiempoSlider.setMaximum(100)
+        self.lineaDeTiempoSlider.setMaximum(1000)
         self.lineaDeTiempoSlider.sliderMoved.connect(self.cambiarTiempo)
 
         self.contenedorLayout.addWidget(self.lineaDeTiempoSlider, 2, 0, 1, 11)
@@ -208,10 +210,14 @@ class reproductorDeMusica(QtGui.QWidget):
             self.reproductorDeLista.play()
             self.playBoton.setIcon(self.pausaIcono)
 
+        self.reproduciendo = True
+
     def stop(self):
         self.reproductor.stop()
         self.playBoton.setIcon(self.playIcono)
+
         self.parent().parent().destruirReproductorDeMusica()
+        self.parent().parent().limpiarThumbsTemporales()
 
     def adelante(self):
         self.reproductorDeLista.next()
@@ -237,6 +243,8 @@ class reproductorDeMusica(QtGui.QWidget):
         self.listaDeReproduccion.add_media(self.streamNuevo)
 
         wallpaper = ".thumbs/" + str(self.thumbNumero) + ".jpg"
+        self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
+        QtGui.QApplication.processEvents()
         self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
 
         self.reproductorDeLista.stop()
@@ -290,12 +298,14 @@ class reproductorDeMusica(QtGui.QWidget):
         self.reproductorDeLista.set_playback_mode("loop")
 
     def cambiarTiempo(self, tiempo):
-        self.reproductor.set_position(tiempo / 100.0)
+        self.reproductor.set_position(tiempo / 1000.0)
 
     def eventoMedioCambiado(self, evento):
         try:
             medioActual = self.reproductor.get_media()
             indiceDeMedioActual = self.listaDeReproduccion.index_of_item(medioActual)
+            self.indiceDePista = indiceDeMedioActual
+            self.actualizarLista()
 
             self.tituloWidget.setText(self.listaDeReproduccionTemporal[indiceDeMedioActual]["titulo"])
             self.setStyleSheet("background-image: url(" + self.listaDeReproduccionTemporal[indiceDeMedioActual]["thumbTemporal"] + "); background-position: left")
@@ -303,13 +313,11 @@ class reproductorDeMusica(QtGui.QWidget):
             pass
 
     def actualizarLineaDeTiempo(self):
-        if not self.reproductor.is_playing():
-            self.temporizador.stop()
-            #self.stop()
-        self.lineaDeTiempoSlider.setValue(self.reproductor.get_time() / 1000)
+        self.lineaDeTiempoSlider.setValue(self.reproductor.get_position() * 1000)
 
     def actualizarLista(self):
-        try:
-            self.parent().parent().actualizarLista(self.listaDeReproduccionTemporal)
-        except:
-            print("Falló la actualización de la lista de Reproducción!")
+        #try:
+        self.parent().parent().actualizarLista(self.listaDeReproduccionTemporal)
+        self.parent().parent().actualizarIndiceDeLista(self.indiceDePista)
+        #except:
+            #print("Falló la actualización de la lista de Reproducción!")
