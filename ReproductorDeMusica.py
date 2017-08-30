@@ -111,6 +111,13 @@ class reproductorDeMusica(QtGui.QWidget):
         self.adelanteBoton.clicked.connect(self.adelante)
         self.contenedorLayout.addWidget(self.adelanteBoton, 3, 3, 1, 1)
 
+        # Dummy boton
+        self.dummyBoton = QtGui.QPushButton(self)
+        self.dummyBoton.setFlat(True)
+        self.dummyBoton.setMaximumSize(5, 5)
+        self.dummyBoton.clicked.connect(self.actualizarEstilo)
+        self.contenedorLayout.addWidget(self.dummyBoton, 3, 6, 1, 1)
+
         self.aleatorioBoton = QtGui.QPushButton(self)
         self.aleatorioBoton.setFlat(True)
         self.aleatorioBoton.setStyleSheet("background-image: url(bg.png)")
@@ -308,7 +315,7 @@ class reproductorDeMusica(QtGui.QWidget):
             self.actualizarLista()
 
             self.tituloWidget.setText(self.listaDeReproduccionTemporal[indiceDeMedioActual]["titulo"])
-            self.setStyleSheet("background-image: url(" + self.listaDeReproduccionTemporal[indiceDeMedioActual]["thumbTemporal"] + "); background-position: left")
+            self.dummyBoton.click()
         except:
             pass
 
@@ -316,8 +323,19 @@ class reproductorDeMusica(QtGui.QWidget):
         self.lineaDeTiempoSlider.setValue(self.reproductor.get_position() * 1000)
 
     def actualizarLista(self):
-        #try:
-        self.parent().parent().actualizarLista(self.listaDeReproduccionTemporal)
-        self.parent().parent().actualizarIndiceDeLista(self.indiceDePista)
-        #except:
-            #print("Falló la actualización de la lista de Reproducción!")
+        try:
+            self.parent().parent().actualizarLista(self.listaDeReproduccionTemporal)
+            self.parent().parent().actualizarIndiceDeLista(self.indiceDePista)
+        except:
+            print("Falló la actualización de la lista de Reproducción!")
+
+    def reproducirCancionEn(self, indice):
+        self.reproductorDeLista.play_item_at_index(indice)
+
+    def actualizarEstilo(self):
+        medioActual = self.reproductor.get_media()
+        indiceDeMedioActual = self.listaDeReproduccion.index_of_item(medioActual)
+        wallpaper = self.listaDeReproduccionTemporal[indiceDeMedioActual]["thumbTemporal"]
+        self.setStyleSheet("background-image: url(" + wallpaper + "); background-position: left")
+        QtGui.QApplication.processEvents()
+        print("Wallpaper")

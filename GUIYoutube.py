@@ -115,6 +115,7 @@ class Ventana(QtGui.QMainWindow):
 
         # ListWidget para la lista de reproducción
         self.listaList = QtGui.QListWidget(self)
+        self.listaList.itemDoubleClicked.connect(self.pistaActivada)
 
         self.listaScroll.setWidget(self.listaList)
         # LineEdit para el término de búsqueda.Ventana
@@ -224,11 +225,6 @@ class Ventana(QtGui.QMainWindow):
         self.aviso = QtGui.QLabel(self)
         self.aviso.setAlignment(QtCore.Qt.AlignCenter)
         self.layoutPrincipal.addWidget(self.aviso, 2, 4, 1, 2)
-
-        # Dummy
-        #self.dummy = QtGui.QLabel(self)
-        #self.dummy.setStyleSheet("background-color:white")
-        #self.layoutPrincipal.addWidget(self.dummy, 5, 4, 1, 2)
 
         # Pop-up para elegir reproductor.
         self.popup = QtGui.QMessageBox(self)
@@ -495,8 +491,15 @@ class Ventana(QtGui.QMainWindow):
             if archivo.endswith(".jpg"):
                 os.remove(os.path.join(dir, archivo))
 
+    def pistaActivada(self, item):
+        indice = self.listaList.row(item)
+        self.reproductor.reproducirCancionEn(indice)
+
+    def eliminarPista(self, item):
+        print("Pista eliminada", item)
 
 def run():
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_X11InitThreads)
     app = QtGui.QApplication(sys.argv)
     win = Ventana()
     sys.exit(app.exec_())
