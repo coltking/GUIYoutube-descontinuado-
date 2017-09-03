@@ -2,9 +2,9 @@
 # -*- encoding=utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
+import os
 import sys
 from urllib.request import urlretrieve
-from glob import glob
 
 
 # Importando clases propias
@@ -52,8 +52,8 @@ class Ventana(QtGui.QMainWindow):
         # Acciones.
         self.accionLimpiar = QtGui.QAction("Limpiar cache de miniaturas", self)
         self.accionLimpiar.setShortcut("Ctrl+Shift+L")
-        self.accionLimpiar.setStatusTip("Limpiar el directorio de thumbnails.")
-        self.accionLimpiar.triggered.connect(self.limpiarCache)
+        self.accionLimpiar.setStatusTip("Limpiar el directorio de thumbnails. (Deshabilitado)")
+        #self.accionLimpiar.triggered.connect(self.limpiarCache)
 
         self.accionSalir = QtGui.QAction("Salir de la aplicacion", self)
         self.accionSalir.setShortcut("Ctrl+Shift+E")
@@ -353,9 +353,10 @@ class Ventana(QtGui.QMainWindow):
 
     def limpiarCache(self):
         os.chdir(".thumbs")
-        thumbs = glob("*.jpg")
+        thumbs = os.listdir()
         for i in thumbs:
-            os.remove(i)
+            if i.endswith(".jpg"):
+                os.remove(i)
 
     def salir(self):
         eleccion = QtGui.QMessageBox.question(self,

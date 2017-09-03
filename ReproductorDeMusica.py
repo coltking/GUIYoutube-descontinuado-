@@ -166,7 +166,7 @@ class reproductorDeMusica(QtGui.QWidget):
     def construirMedio(self):
         self.medio = self.buscarEnlace()
         self.stream = self.instancia.media_new("https" + self.medio[-1][:-1])
-        self.stream.parse()
+        #self.stream.parse()
         self.listaDeReproduccion.add_media(self.stream)
 
         self.listaDeRreproduccionTemporal = []
@@ -177,8 +177,6 @@ class reproductorDeMusica(QtGui.QWidget):
         self.temporizador.start(1000)
         self.reproductor.audio_set_volume(50)
         self.volumenSlider.setValue(self.reproductor.audio_get_volume())
-
-        #self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
 
         # Para listas de reproducción
         nombreDeThumb = str(random.choice(string.ascii_uppercase) + random.choice(string.digits) + random.choice(string.ascii_lowercase))
