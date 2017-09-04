@@ -339,3 +339,4 @@ class reproductorDeMusica(QtGui.QWidget):
 
     def eliminarPista(self, indice):
         del self.listaDeReproduccionTemporal[indice]
+        self.listaDeReproduccion.remove_index(indice)
