@@ -45,23 +45,25 @@ class BYT():
         self.descargarthumb()
 
         #este for llena el diccionario
-        self.lista = {}
-        for i in range(len(self.duraciones)):
-            tmp1 = "Titulo"+str(i)
-            tmp2 = "ID"+str(i)
-            tmp3 = "Duracion"+str(i)
-            tmpPlayMPV = "PlayMPV"+str(i)
-            tmpPlayVLC = "PlayVLC"+str(i)
-            tmpDownload = "Descarga"+str(i)
-            self.lista[tmp1] = self.titulos[i]
-            self.lista[tmp2] = self.IDs[i]
-            self.lista[tmp3] = self.duraciones[i]
-            self.lista[tmpPlayMPV] = ["https://www.youtube.com/watch?v=" + self.IDs[i]]
-            self.lista[tmpPlayVLC] = ["vlc","https://www.youtube.com/watch?v=" + self.IDs[i]]
-            self.lista[tmpDownload] = ["https://www.youtube.com/watch?v=" + str(self.IDs[i])]
-        # Este return deberia devolver el diccionario.
-        return self.lista
+        #
+        #IMPORTANTE: Ahora se retorna una lista de diccionarios en vez de
+        #un sólo diccionario enorme.
+        #
+        self.lista = []
 
+        for i in range(0, len(self.duraciones)):
+            self.dict = {}
+            self.dict["Título"] = self.titulos[i]
+            self.dict["ID"] = self.IDs[i]
+            self.dict["Duración"] = self.duraciones[i]
+            self.dict["PlayMPV"] = ["https://www.youtube.com/watch?v=" + self.IDs[i]]
+            self.dict["PlayVLC"] = ["vlc","https://www.youtube.com/watch?v=" + self.IDs[i]]
+            self.dict["Descarga"] = ["https://www.youtube.com/watch?v=" + str(self.IDs[i])]
+
+            self.lista.append(self.dict)
+
+        # Este return debería devolver el diccionario.
+        return self.lista
 
     def descargarthumb(self):
         for i in range(0, len(self.duraciones)):

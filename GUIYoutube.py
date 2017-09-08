@@ -272,30 +272,11 @@ class Ventana(QtGui.QMainWindow):
             self.cantidad = 20
 
         # Búsqueda de videos en listas de reproducción.
-        salida = ""
         if "//www.youtube.com/playlist" in self.terminoDeBusqueda.text():
-            data = subprocess.Popen(["python3", "youtube_dl/__main__.py",
-                                    "--get-title",
-                                    "--get-id",
-                                    "--get-duration",
-                                    str(self.terminoDeBusqueda.text())],
-                                    universal_newlines=True,
-                                    stdout=subprocess.PIPE)
+            nuevaBusqueda = BusquedaDeLista()
+            self.resultados = nuevaBusqueda.obtenerDatos(self.terminoDeBusqueda.text())
 
-            while data.poll() == None:
-                try:
-                    salida = data.communicate()
-                except:
-                    pass
-
-            stdOutDatos = salida[0]
-            datos = str(stdOutDatos).split("\n")
-
-            objetoBusqueda = BusquedaDeLista(datos, 3)
-            self.resultados = objetoBusqueda.obtenerDatos()
-            self.cantidad = int(len(self.resultados) / 6)
-
-        # Búsqueda por térmio de búsqueda
+         #Búsqueda por térmio de búsqueda
         else:
             termino = self.terminoDeBusqueda.text()
             objetoBusqueda = BYT(termino, self.cantidad)
@@ -333,16 +314,18 @@ class Ventana(QtGui.QMainWindow):
             subprocess.Popen(["notify-send", "-t","4000", "Descarga finalizada (revise su carpeta de descargas)"])
 
     def poblarLista(self, resultados, cantidad):
+        print(resultados)
         tempWidget = QtGui.QWidget(self)
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
 
-        for i in range(0, cantidad):
-            videoBlock = VideoWidget(resultados["Titulo" + str(i)], i,
-                                    resultados["Duracion" + str(i)],
-                                    resultados["PlayVLC" + str(i)],
-                                    resultados["PlayMPV" + str(i)],
-                                    resultados["Descarga" + str(i)],
+        for i in range(0, len(resultados)):
+            videoBlock = VideoWidget(resultados[i]["Título"],
+                                        i,
+                                    resultados[i]["Duración"],
+                                    resultados[i]["PlayVLC"],
+                                    resultados[i]["PlayMPV"],
+                                    resultados[i]["Descarga"],
                                     self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
             self.aviso.setText("")
