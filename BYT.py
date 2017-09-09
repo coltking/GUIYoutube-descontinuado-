@@ -68,30 +68,3 @@ class BYT():
     def descargarthumb(self):
         for i in range(0, len(self.duraciones)):
             U.urlretrieve( "http://img.youtube.com/vi/"+self.IDs[i]+"/mqdefault.jpg", ".thumbs/" + str(i) + ".jpg")
-
-            #print("http://img.youtube.com/vi/"+self.IDs[i][9:]+"/mqdefault.jpg")
-        # Esto de aqui ya esta demas. Lo dejo por si sirve de guia en el futuro.
-        #for i in range(0, len(self.titulos)):
-            #print("Video", str(i), ":", self.titulos[i], ". Duration:",
-            #self.duraciones[i], "Mns. ID:", '"',
-            #self.IDs[i], '".')
-
-
-            #Lo que sigue a continuacion sirve unicamente para testeo de este script.
-        #Para la version final ha de eliminarse/comentarse para que no interfiera.
-
-
-
-if __name__ == "__main__":
-    conn = BYT("hola mundo",10)
-    hola = conn.obtenerDatos()
-    subprocess.Popen(conn.lista["PlayVLC0"])
-
-
-
-# Nuevo objeto BYT() - Toma dos parametros, terminoDeBusqueda y numeroDeResultados.
-#nuevaBusqueda = BYT("Godot Engine", 2)
-# Llamada al metodo obtenerDatos del objeto BYT()
-#resultado = nuevaBusqueda.obtenerDatos()
-# Print
-#print(resultado)

@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+ #! /usr/bin/env python3
 # -*- encoding=utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
@@ -34,6 +34,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.reproductor = ""
         self.reproductorActivo = False
+        self.indiceDePista = 0
 
         self.format = ""
         self.preferedformat = ""
@@ -98,6 +99,12 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal = QtGui.QGridLayout(self)
         self.widgetPrincipal.setLayout(self.layoutPrincipal)
         self.setCentralWidget(self.widgetPrincipal)
+
+        # Dummy para actualizar indice en la lista de reproducción
+        self.dummy = QtGui.QPushButton(self)
+        self.dummy.clicked.connect(self.actualizarIndiceSeleccionado)
+
+        self.layoutPrincipal.addWidget(self.dummy, 1, 1, 1, 1)
 
         # Scrolled area para la lista de videos.
 
@@ -314,12 +321,11 @@ class Ventana(QtGui.QMainWindow):
             subprocess.Popen(["notify-send", "-t","4000", "Descarga finalizada (revise su carpeta de descargas)"])
 
     def poblarLista(self, resultados, cantidad):
-        print(resultados)
         tempWidget = QtGui.QWidget(self)
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
 
-        for i in range(0, len(resultados)):
+        for i in range(0, cantidad):
             videoBlock = VideoWidget(resultados[i]["Título"],
                                         i,
                                     resultados[i]["Duración"],
@@ -477,7 +483,11 @@ class Ventana(QtGui.QMainWindow):
             self.listaList.insertItem(i, itemDeLista)
 
     def actualizarIndiceDeLista(self, indice):
-        item = self.listaList.item(indice)
+        self.indiceDePista = indice
+        self.dummy.click()
+
+    def actualizarIndiceSeleccionado(self):
+        item = self.listaList.item(self.indiceDePista)
         self.listaList.setItemSelected(item, True)
 
     def limpiarThumbsTemporales(self):
@@ -494,7 +504,6 @@ class Ventana(QtGui.QMainWindow):
     def eliminarPista(self):
         pista = self.listaList.currentRow()
         self.listaList.takeItem(pista)
-        print(pista)
 
         self.reproductor.eliminarPista(pista)
 

@@ -279,8 +279,6 @@ class reproductorDeMusica(QtGui.QWidget):
         nuevoMedio = self.instancia.media_new("https" + itemDeLista[-1][:-1])
         self.listaDeReproduccion.add_media(nuevoMedio)
 
-        #self.parent().parent().actualizarLista(self.listaDeReproduccion.count())
-
         # Para listas de reproducción
         nombreDeThumb = str(random.choice(string.ascii_uppercase) + random.choice(string.digits) + random.choice(string.ascii_lowercase))
         shutil.copy(".thumbs/" + str(thumbNumero) + ".jpg", ".thumbsTemporales/" + nombreDeThumb + ".jpg")
