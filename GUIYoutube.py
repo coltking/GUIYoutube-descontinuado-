@@ -1,4 +1,4 @@
- #! /usr/bin/env python3
+#! /usr/bin/env python3
 # -*- encoding=utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
