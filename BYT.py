@@ -4,10 +4,10 @@ import sys
 import os
 import urllib.request as U
 import urllib.parse
+path = os.path.abspath(os.path.join(os.getcwd(), "lib"))
+sys.path.append(path)
 sys.path.append(os.getcwd() + "bs4")
-sys.path.append(os.getcwd() + "youtube")
 import bs4 as bs
-from youtube_dl import YoutubeDL as YT
 
 
 class BYT():

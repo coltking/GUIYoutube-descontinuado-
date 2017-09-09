@@ -3,7 +3,8 @@ from PyQt4 import QtCore, QtGui
 import subprocess
 import sys
 import os
-sys.path.append(os.getcwd() + "youtube_dl")
+path = os.path.abspath(os.path.join(os.getcwd(), "lib"))
+sys.path.append(path)
 from youtube_dl import YoutubeDL as YT
 
 

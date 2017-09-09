@@ -1,12 +1,14 @@
 # -*- encoding=utf-8 -*-
 
 import urllib.request as U
-import requests
 import os
 import sys
 import time
+path = os.path.abspath(os.path.join(os.getcwd(), "lib"))
+sys.path.append(path)
 sys.path.append(os.getcwd() + "bs4")
 import bs4 as bs
+from lib import requests
 
 class BusquedaDeLista():
 

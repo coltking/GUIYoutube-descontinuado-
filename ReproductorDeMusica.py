@@ -196,7 +196,7 @@ class reproductorDeMusica(QtGui.QWidget):
         self.actualizarLista()
 
     def buscarEnlace(self):
-        with subprocess.Popen(['python3 youtube_dl/__main__.py --get-url ' + self.link + '--get-url'],
+        with subprocess.Popen(['python3 lib/youtube_dl/__main__.py --get-url ' + self.link + '--get-url'],
         stdout=subprocess.PIPE,
         shell=True, universal_newlines=True) as proc:
             texto = proc.stdout.read()
