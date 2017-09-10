@@ -21,7 +21,7 @@ class Ventana(QtGui.QMainWindow):
 
     def __init__(self):
         super(Ventana, self).__init__()
-        self.ver = "0.2 Alpha"
+        self.ver = "0.3 Alpha"
         self.setWindowTitle("GUIYoutube - "+self.ver)
         self.setWindowIcon(QtGui.QIcon("Youtube.ico"))
         self.setGeometry(100, 100, 1000, 500)
@@ -34,6 +34,7 @@ class Ventana(QtGui.QMainWindow):
 
         self.reproductor = ""
         self.reproductorActivo = False
+        self.listaActiva = False
         self.indiceDePista = 0
 
         self.format = ""
@@ -283,13 +284,17 @@ class Ventana(QtGui.QMainWindow):
             nuevaBusqueda = BusquedaDeLista()
             self.resultados = nuevaBusqueda.obtenerDatos(self.terminoDeBusqueda.text())
 
+            self.poblarLista(self.resultados, self.cantidad, True)
+            self.listaActiva = True
+
          #Búsqueda por térmio de búsqueda
         else:
+            self.listaActiva = False
             termino = self.terminoDeBusqueda.text()
             objetoBusqueda = BYT(termino, self.cantidad)
             self.resultados = objetoBusqueda.obtenerDatos()
 
-        self.poblarLista(self.resultados, self.cantidad)
+            self.poblarLista(self.resultados, self.cantidad)
 
     def descargaporlinkparametros(self):
         if "//www.youtube.com/watch" in self.terminoDeBusqueda.text():
@@ -320,10 +325,15 @@ class Ventana(QtGui.QMainWindow):
             #self.popup = QtGui.QMessageBox.information(self, "Informacion", """Descarga finalizada (revise la carpeta Descargas)""",QtGui.QMessageBox.Ok)
             subprocess.Popen(["notify-send", "-t","4000", "Descarga finalizada (revise su carpeta de descargas)"])
 
-    def poblarLista(self, resultados, cantidad):
+    def poblarLista(self, resultados, cantidad, listaDeReproduccion=False):
         tempWidget = QtGui.QWidget(self)
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
+
+        if listaDeReproduccion:
+            cantidad = len(resultados)
+        else:
+            cantidad = cantidad
 
         for i in range(0, cantidad):
             videoBlock = VideoWidget(resultados[i]["Título"],
@@ -335,6 +345,7 @@ class Ventana(QtGui.QMainWindow):
                                     self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
             self.aviso.setText("")
+
         if self.reproductorActivo:
             self.scrollPequeno.setWidget(tempWidget)
         else:
@@ -457,13 +468,17 @@ class Ventana(QtGui.QMainWindow):
         self.layoutPrincipal.addWidget(self.scrollPequeno, 0, 0, 5, 4)
 
         # Recreando los widgets de video
-        self.poblarLista(self.resultados, self.cantidad)
+        if self.listaActiva:
+            self.poblarLista(self.resultados, self.cantidad, True)
+        else:
+            self.poblarLista(self.resultados, self.cantidad)
 
     def destruirReproductorDeMusica(self):
         self.reproductorActivo = False
         # Se elimina el scrolled area pequeno
         self.scrollPequeno.hide()
         self.reproductor.hide()
+        self.listaScroll.hide()
 
         # Se restaura el scrolled grande
         self.scroll.show()

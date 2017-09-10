@@ -1,6 +1,7 @@
 #!/usr/bin/env xdg-open
+
 [Desktop Entry]
-Version=0.0.1
+Version=0.0.3 Alpha
 Type=Application
 Terminal=false
 Icon=guiyoutube
