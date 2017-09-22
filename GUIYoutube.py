@@ -333,7 +333,7 @@ class Ventana(QtGui.QMainWindow):
         if listaDeReproduccion:
             cantidad = len(resultados)
         else:
-            cantidad = cantidad
+            cantidad = len(resultados)
 
         for i in range(0, cantidad):
             videoBlock = VideoWidget(resultados[i]["Título"],
