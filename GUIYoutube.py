@@ -277,7 +277,7 @@ class Ventana(QtGui.QMainWindow):
         if self.opcion3.isChecked() == True:
             self.cantidad = 10
         if self.opcion4.isChecked() == True:
-            self.cantidad = 20
+            self.cantidad = 40
 
         # Búsqueda de videos en listas de reproducción.
         if "//www.youtube.com/playlist" in self.terminoDeBusqueda.text():
@@ -330,10 +330,12 @@ class Ventana(QtGui.QMainWindow):
         tempLayout = QtGui.QVBoxLayout(self)
         tempWidget.setLayout(tempLayout)
 
-        if listaDeReproduccion:
-            cantidad = len(resultados)
+        if self.reproductorActivo:
+            self.scrollPequeno.setWidget(tempWidget)
         else:
-            cantidad = len(resultados)
+            self.scroll.setWidget(tempWidget)
+
+        cantidad = len(resultados)
 
         for i in range(0, cantidad):
             videoBlock = VideoWidget(resultados[i]["Título"],
@@ -345,11 +347,6 @@ class Ventana(QtGui.QMainWindow):
                                     self.reproductorPreferido)
             tempLayout.addWidget(videoBlock)
             self.aviso.setText("")
-
-        if self.reproductorActivo:
-            self.scrollPequeno.setWidget(tempWidget)
-        else:
-            self.scroll.setWidget(tempWidget)
 
     def limpiarCache(self):
         os.chdir(".thumbs")
