@@ -1,7 +1,7 @@
 # proyecto GUIYoutube
 
-Este proyecto fue inicializado por ColTKinG (@JuanRosario en telegram) en plan de crear
-una aplicacion de escritorio para buscar, ver, y descargar contenido de YouTube.
+Este proyecto fue inicializado en plan de aprender a desarrollar una GUI (Graphical User Interface) en python con PyQT
+la idea es lograr una aplicacion de escritorio para buscar, ver, y descargar contenido de YouTube de forma nativa en sistemas que soporten QT y python.
 
 El archivo sobre el que se va a trabajar es GUIYoutube.py, ya que es el archivo que
 tiene el código principal.
